@@ -20,21 +20,52 @@ export const normalizeImageUrl = (imagePath: string): string => {
   if (!imagePath) return '';
   
   const apiUrl = getApiUrl();
+  const apiDomain = apiUrl.replace('https://', '').replace('http://', '');
   
-  // If already a full URL from our backend, convert to proxy path to avoid CORS
-  if (imagePath.startsWith(apiUrl)) {
+  console.log('🔍 normalizeImageUrl:', { imagePath, apiUrl, apiDomain });
+  
+  // Check if the URL contains our backend domain (even if protocol differs)
+  const containsBackendDomain = imagePath.includes(apiDomain);
+  
+  // Also check for localhost URLs (from old configuration)
+  const isLocalhostUrl = imagePath.includes('localhost:7065') || imagePath.includes('localhost:5094');
+  
+  // If it's localhost, convert to proxy path by extracting just the path part
+  if (isLocalhostUrl) {
+    // Extract path after localhost:PORT
+    const localhostMatch = imagePath.match(/localhost:\d+(.+)/);
+    if (localhostMatch) {
+      const path = localhostMatch[1];
+      console.log('🔧 Converting localhost URL to proxy:', imagePath, '→', `/backend-images${path}`);
+      return `/backend-images${path}`;
+    }
+  }
+  
+  // If it's a backend URL (full or contains backend domain), convert to proxy path
+  if (imagePath.startsWith(apiUrl) || containsBackendDomain) {
     // Extract the path after the domain
-    const path = imagePath.replace(apiUrl, '');
+    let path = imagePath.replace(apiUrl, '');
+    
+    // If it still has protocol (http/https), extract just the path part
+    if (path.includes(apiDomain)) {
+      const urlParts = path.split(apiDomain);
+      path = urlParts[urlParts.length - 1];
+    }
+    
+    console.log('🔄 Converting backend URL to proxy:', imagePath, '→', `/backend-images${path}`);
     return `/backend-images${path}`;
   }
   
-  // If it's a full external URL, return as is
+  // If it's a full external URL (not our backend), return as is
   if (/^https?:\/\//.test(imagePath)) {
+    console.log('🌐 Using external URL as-is:', imagePath);
     return imagePath;
   }
   
   // For relative paths, use proxy path
-  return `/backend-images${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+  const result = `/backend-images${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+  console.log('📁 Converting relative path to proxy:', imagePath, '→', result);
+  return result;
 };
 
 /**
@@ -81,7 +112,12 @@ export const fetchImageAsBlob = async (imagePath: string): Promise<string | null
 export const getImageSource = (imagePath: string): string => {
   if (!imagePath) return '';
   
+  console.log('🖼️ getImageSource INPUT:', imagePath);
+  console.log('🏢 Current API URL:', getApiUrl());
+  
   const normalizedUrl = normalizeImageUrl(imagePath);
+  
+  console.log('✨ Normalized URL:', normalizedUrl);
   
   // Only encode if it's not already a proxy path (proxy paths are already handled)
   if (normalizedUrl.startsWith('/backend-images')) {
@@ -89,10 +125,14 @@ export const getImageSource = (imagePath: string): string => {
     const parts = normalizedUrl.split('/');
     const filename = parts[parts.length - 1];
     const basePath = parts.slice(0, -1).join('/');
-    return `${basePath}/${encodeURIComponent(filename)}`;
+    const result = `${basePath}/${encodeURIComponent(filename)}`;
+    console.log('✅ FINAL proxy path:', result);
+    return result;
   }
   
-  return encodeImageUrl(normalizedUrl);
+  const result = encodeImageUrl(normalizedUrl);
+  console.log('⚠️ FINAL direct URL (not proxied!):', result);
+  return result;
 };
 
 /**
