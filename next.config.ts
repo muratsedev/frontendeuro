@@ -9,14 +9,29 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'eennback-002-site1.atempurl.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.atempurl.com',
+      },
+      {
+        protocol: 'https',
         hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
       },
       {
         protocol: 'http',
         hostname: '**',
       },
     ],
-    unoptimized: false,
+    unoptimized: true, // Changed to true to avoid optimization issues with CORS
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   // Turbopack configuration (for --turbopack flag)
   experimental: {
@@ -52,6 +67,11 @@ const nextConfig: NextConfig = {
       {
         source: '/api/backend/:path*',
         destination: `${backendUrl}/api/:path*`,
+      },
+      // Proxy image requests to avoid CORS issues
+      {
+        source: '/backend-images/:path*',
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },

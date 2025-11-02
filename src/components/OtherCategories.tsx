@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useRef } from 'react';
 import { articlesApi, getCategories } from '../app/lib/api';
 import { AllArticles } from '../app/types/Articles';
-import { encodeImageUrl } from '../app/lib/imageUtils';
+import { fetchImageAsBlob, getImageSource } from '../app/lib/imageHelpers';
 import { formatDateArabic } from '../app/lib/hijriUtils';
 
 interface OtherCategoriesProps {
@@ -21,38 +21,31 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
   const [loading, setLoading] = useState(true);
   const [imageBlobs, setImageBlobs] = useState<{ [key: string]: string }>({});
   const fetchedImages = useRef<{ [key: string]: boolean }>({});
-  // Fetch images as blobs for localhost
+  // Fetch images with improved error handling
   useEffect(() => {
     const fetchImages = async () => {
       const newBlobs: { [key: string]: string } = {};
+      
       await Promise.all(
         articles.map(async (article) => {
           const url = article.imagePath;
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7065';
-          if (
-            url &&
-            url.startsWith(apiUrl) &&
-            !fetchedImages.current[url]
-          ) {
-            try {
-              // Encode the URL properly to handle spaces and special characters
-              const encodedUrl = encodeImageUrl(url);
-              const res = await fetch(encodedUrl);
-              if (res.ok) {
-                const blob = await res.blob();
-                newBlobs[url] = URL.createObjectURL(blob);
-                fetchedImages.current[url] = true;
-              }
-            } catch {
-              // ignore fetch error, fallback to url
-            }
+          if (!url || fetchedImages.current[url]) return;
+          
+          const blobUrl = await fetchImageAsBlob(url);
+          if (blobUrl) {
+            newBlobs[url] = blobUrl;
           }
+          
+          // Mark as processed to avoid retry
+          fetchedImages.current[url] = true;
         })
       );
+      
       if (Object.keys(newBlobs).length > 0) {
         setImageBlobs((prev) => ({ ...prev, ...newBlobs }));
       }
     };
+    
     if (articles.length > 0) fetchImages();
   }, [articles]);
 
@@ -121,7 +114,7 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
                       The warning for <img> can be safely ignored for blobs.
                     */}
                     <Image
-                      src={imageBlobs[article.imagePath] ? imageBlobs[article.imagePath] : article.imagePath}
+                      src={getImageSource(article.imagePath)}
                       alt={article.articleTitle}
                       fill
                       className="object-cover rounded-t-xl"
@@ -130,6 +123,11 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
                       priority={false}
                       loader={({ src }) => src}
                       unoptimized={!!imageBlobs[article.imagePath]}
+                      onError={(e) => {
+                        console.warn('Image load error for:', article.imagePath);
+                        // Fallback to a placeholder or hide the image
+                        e.currentTarget.style.display = 'none';
+                      }}
                     />
                     {/* Light gradient overlay for subtle effect */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />

@@ -1,7 +1,7 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { encodeImageUrl } from "../app/lib/imageUtils";
+import { useImageLoader } from "../hooks/useImageLoader";
 
 export type Article = {
   id: string;
@@ -163,96 +163,7 @@ interface BigArticleCardProps {
 }
 
 const BigArticleCard = ({ article, isAnimating = false }: BigArticleCardProps) => {
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [isBlob, setIsBlob] = useState(false);
-  
-  useEffect(() => {
-    let objectUrl: string | null = null;
-    const fetchImage = async () => {
-      if (!article.imagePath) {
-        console.log('BigArticle - No image path provided');
-        return;
-      }
-      
-      console.log('BigArticle - Fetching image:', article.imagePath);
-      
-      // Always fetch as blob for backend images
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7065';
-      if (article.imagePath.includes(apiUrl.replace('https://', '').replace('http://', '')) || article.imagePath.includes('/uploads/')) {
-        try {
-          // Construct full URL if it's a relative path, then encode
-          let fullUrl = article.imagePath;
-          if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
-            fullUrl = `${apiUrl}${fullUrl.startsWith('/') ? '' : '/'}${fullUrl}`;
-          }
-          
-          // Encode the URL properly to handle spaces and special characters
-          const encodedUrl = encodeImageUrl(fullUrl);
-          console.log('BigArticle - Original path:', article.imagePath);
-          console.log('BigArticle - Full URL:', fullUrl);
-          console.log('BigArticle - Encoded URL for fetch:', encodedUrl);
-          
-          const res = await fetch(encodedUrl, { 
-            credentials: 'include',
-            mode: 'cors',
-            cache: 'no-cache'
-          });
-          
-          console.log('BigArticle - Fetch response status:', res.status, res.statusText);
-          
-          if (res.ok) {
-            const blob = await res.blob();
-            console.log('BigArticle - Blob created, size:', blob.size, 'type:', blob.type);
-            objectUrl = URL.createObjectURL(blob);
-            setImgSrc(objectUrl);
-            setIsBlob(true);
-          } else {
-            console.error('BigArticle - Fetch failed with status:', res.status);
-            // Try alternative URL format
-            const altUrl = article.imagePath.startsWith(apiUrl) 
-              ? article.imagePath 
-              : `${apiUrl}${article.imagePath.startsWith('/') ? '' : '/'}${article.imagePath}`;
-            
-            if (altUrl !== article.imagePath) {
-              console.log('BigArticle - Trying alternative URL:', altUrl);
-              const encodedAltUrl = encodeImageUrl(altUrl);
-              console.log('BigArticle - Encoded alternative URL:', encodedAltUrl);
-              const altRes = await fetch(encodedAltUrl, { 
-                credentials: 'include',
-                mode: 'cors',
-                cache: 'no-cache'
-              });
-              if (altRes.ok) {
-                const blob = await altRes.blob();
-                objectUrl = URL.createObjectURL(blob);
-                setImgSrc(objectUrl);
-                setIsBlob(true);
-                return;
-              }
-            }
-            
-            console.error('BigArticle - Failed to load image from API');
-          }
-        } catch (error) {
-          console.error('BigArticle - Fetch error:', error);
-        }
-      } else if (/^https?:\/\//.test(article.imagePath)) {
-        // For external URLs, use directly
-        console.log('BigArticle - Using direct URL for external image');
-        setImgSrc(article.imagePath);
-        setIsBlob(false);
-      } else {
-        console.log('BigArticle - Unknown image path format');
-      }
-    };
-    fetchImage();
-    return () => {
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
-        console.log('BigArticle - Object URL revoked');
-      }
-    };
-  }, [article.imagePath]);
+  const { imgSrc, isBlob } = useImageLoader(article.imagePath);
 
   if (!imgSrc) {
     return (
@@ -302,96 +213,7 @@ interface SmallArticleCardProps {
 }
 
 const SmallArticleCard = ({ article, isAnimating = false, position }: SmallArticleCardProps) => {
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [isBlob, setIsBlob] = useState(false);
-  
-  useEffect(() => {
-    let objectUrl: string | null = null;
-    const fetchImage = async () => {
-      if (!article.imagePath) {
-        console.log('SmallArticle - No image path provided');
-        return;
-      }
-      
-      console.log('SmallArticle - Fetching image:', article.imagePath);
-      
-      // Always fetch as blob for backend images
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7065';
-      if (article.imagePath.includes(apiUrl.replace('https://', '').replace('http://', '')) || article.imagePath.includes('/uploads/')) {
-        try {
-          // Construct full URL if it's a relative path, then encode
-          let fullUrl = article.imagePath;
-          if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
-            fullUrl = `${apiUrl}${fullUrl.startsWith('/') ? '' : '/'}${fullUrl}`;
-          }
-          
-          // Encode the URL properly to handle spaces and special characters
-          const encodedUrl = encodeImageUrl(fullUrl);
-          console.log('SmallArticle - Original path:', article.imagePath);
-          console.log('SmallArticle - Full URL:', fullUrl);
-          console.log('SmallArticle - Encoded URL for fetch:', encodedUrl);
-          
-          const res = await fetch(encodedUrl, { 
-            credentials: 'include',
-            mode: 'cors',
-            cache: 'no-cache'
-          });
-          
-          console.log('SmallArticle - Fetch response status:', res.status, res.statusText);
-          
-          if (res.ok) {
-            const blob = await res.blob();
-            console.log('SmallArticle - Blob created, size:', blob.size, 'type:', blob.type);
-            objectUrl = URL.createObjectURL(blob);
-            setImgSrc(objectUrl);
-            setIsBlob(true);
-          } else {
-            console.error('SmallArticle - Fetch failed with status:', res.status);
-            // Try alternative URL format
-            const altUrl = article.imagePath.startsWith(apiUrl) 
-              ? article.imagePath 
-              : `${apiUrl}${article.imagePath.startsWith('/') ? '' : '/'}${article.imagePath}`;
-            
-            if (altUrl !== article.imagePath) {
-              console.log('SmallArticle - Trying alternative URL:', altUrl);
-              const encodedAltUrl = encodeImageUrl(altUrl);
-              console.log('SmallArticle - Encoded alternative URL:', encodedAltUrl);
-              const altRes = await fetch(encodedAltUrl, { 
-                credentials: 'include',
-                mode: 'cors',
-                cache: 'no-cache'
-              });
-              if (altRes.ok) {
-                const blob = await res.blob();
-                objectUrl = URL.createObjectURL(blob);
-                setImgSrc(objectUrl);
-                setIsBlob(true);
-                return;
-              }
-            }
-            
-            console.error('SmallArticle - Failed to load image from API');
-          }
-        } catch (error) {
-          console.error('SmallArticle - Fetch error:', error);
-        }
-      } else if (/^https?:\/\//.test(article.imagePath)) {
-        // For external URLs, use directly
-        console.log('SmallArticle - Using direct URL for external image');
-        setImgSrc(article.imagePath);
-        setIsBlob(false);
-      } else {
-        console.log('SmallArticle - Unknown image path format');
-      }
-    };
-    fetchImage();
-    return () => {
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
-        console.log('SmallArticle - Object URL revoked');
-      }
-    };
-  }, [article.imagePath]);
+  const { imgSrc, isBlob } = useImageLoader(article.imagePath);
 
   if (!imgSrc) {
     return (

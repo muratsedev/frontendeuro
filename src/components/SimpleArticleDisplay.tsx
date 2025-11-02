@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { encodeImageUrl } from "../app/lib/imageUtils";
+import { fetchImageAsBlob, getImageSource } from "../app/lib/imageHelpers";
 import { AllArticles, AllCategories } from "../app/types/Articles";
 
 interface SimpleArticleDisplayProps {
@@ -33,40 +33,25 @@ const SimpleArticleDisplay = ({
   useEffect(() => {
     let objectUrl: string | null = null;
     
-    const fetchImage = async () => {
+    const loadImage = async () => {
       if (!article.imagePath) return;
       
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7065';
-      if (article.imagePath.includes(apiUrl.replace('https://', '').replace('http://', '')) || article.imagePath.includes('/uploads/')) {
-        try {
-          let fullUrl = article.imagePath;
-          if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
-            fullUrl = `${apiUrl}${fullUrl.startsWith('/') ? '' : '/'}${fullUrl}`;
-          }
-          
-          const encodedUrl = encodeImageUrl(fullUrl);
-          const res = await fetch(encodedUrl, { 
-            credentials: 'include',
-            mode: 'cors',
-            cache: 'no-cache'
-          });
-          
-          if (res.ok) {
-            const blob = await res.blob();
-            objectUrl = URL.createObjectURL(blob);
-            setImgSrc(objectUrl);
-            setIsBlob(true);
-          }
-        } catch (error) {
-          console.error('SimpleArticleDisplay - Fetch error:', error);
-        }
-      } else if (/^https?:\/\//.test(article.imagePath)) {
-        setImgSrc(article.imagePath);
+      // Try to fetch as blob first for better loading
+      const blobUrl = await fetchImageAsBlob(article.imagePath);
+      
+      if (blobUrl) {
+        objectUrl = blobUrl;
+        setImgSrc(blobUrl);
+        setIsBlob(true);
+      } else {
+        // Fallback to direct URL
+        const directUrl = getImageSource(article.imagePath);
+        setImgSrc(directUrl);
         setIsBlob(false);
       }
     };
     
-    fetchImage();
+    loadImage();
     
     return () => {
       if (objectUrl) {

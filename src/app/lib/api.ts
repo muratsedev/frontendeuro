@@ -1,9 +1,10 @@
 import axios from 'axios';
 import https from 'https';
 import { AllArticles, AllCategories } from '../types/Articles';
+import { BACKEND_API_URL } from './config';
 
-// Update BASE_URL to match your backend - remove /api from here
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+// Use centralized backend URL configuration
+const BASE_URL = BACKEND_API_URL;
 
 // Configure axios to handle HTTPS with self-signed certificates
 const httpsAgent = new https.Agent({
