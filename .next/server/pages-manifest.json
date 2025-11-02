@@ -1,5 +1,0 @@
-{
-  "/api/breaking-news": "pages/api/breaking-news.js",
-  "/api/navigation": "pages/api/navigation.js",
-  "/api/articles": "pages/api/articles.js"
-}

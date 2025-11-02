@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/src/app/inter_d10259d6.module.css"],"sourcesContent":["@font-face {\n    font-family: 'inter';\n    src: url('@vercel/turbopack-next/internal/font/local/font?{%22path%22:%22../app/fonts/ArbFONTS-Al-Jazeera-Arabic-Bold.ttf%22,%22preload%22:true,%22has_size_adjust%22:true}') format('truetype');\n    font-display: swap;\n    font-weight: 400;font-style: normal;\n}\n\n@font-face {\n    font-family: 'inter Fallback';\n    src: local(\"Arial\");\n    ascent-override: 105.40%;\ndescent-override: 60.20%;\nline-gap-override: 3.40%;\nsize-adjust: 100.00%;\n\n}\n\n.className {\n    font-family: 'inter', 'inter Fallback';\n    \n}\n.variable {\n    --font-inter: 'inter', 'inter Fallback';\n}\n\n"],"names":[],"mappings":"AAAA;;;;;;;;AAOA;;;;;;;;;AAUA;;;;AAIA"}},
-    {"offset": {"line": 25, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}
