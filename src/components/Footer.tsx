@@ -48,34 +48,23 @@ function Footer() {
   // Split categories into two columns for better layout
 
   return (
-    <footer className="text-white">
+    // <footer className="text-white">
+    <footer className="text-gray-600 mt-5">
+      <div className="container mx-auto px-4 flex flex-col-reverse divide-y-4 divide-y-reverse divide-gray-200">
+        <div></div>
+        <div></div>
+      </div>
       {/* Green Background Section with Container */}
-      <div className="bg-primaryOther container mx-auto px-4">
+      {/* <div className="bg-primaryOther container mx-auto px-4"> */}
+      <div className="container mx-auto px-4">
         <div className="container mx-auto px-4">
           {/* Main Footer Content */}
           <div
             className="grid grid-cols-1 md:grid-cols-12 gap-8 py-10 md:py-12"
             dir="rtl"
           >
-            {/* Logo and Description Section - 3 columns on desktop */}
-            <div className="md:col-span-3 text-center md:text-center">
-              <Link
-                href="/"
-                title="الصفحة الرئيسية - الأوروبية"
-                className="inline-block mb-4"
-              >
-                <Image
-                  src={"/brand.png"}
-                  alt="شعار جريدة الأوروبية"
-                  width={140}
-                  height={140}
-                  className="hover:opacity-90 transition-opacity mt-10"
-                />
-              </Link>
-            </div>
-
-            {/* Categories Section - 3 columns on desktop */}
-            <div className="md:col-span-3 text-center md:text-right">
+            {/* Categories Section - 4 columns on desktop */}
+            <div className="md:col-span-4 text-center md:text-right">
               <h3 className="font-bold text-xl mb-4 border-b-2 border-white/20 pb-2 inline-block">
                 الأقسام
               </h3>
@@ -83,7 +72,7 @@ function Footer() {
                 <li>
                   <Link
                     href="/articles"
-                    className="hover:text-gray-200 transition-colors text-sm md:text-base flex items-center justify-center md:justify-start gap-2"
+                    className="hover:underline transition-all text-sm md:text-base flex items-center justify-center md:justify-start gap-2"
                   >
                     <span>كل الأخبار</span>
                   </Link>
@@ -95,7 +84,7 @@ function Footer() {
                     <li key={category.id}>
                       <Link
                         href={category.href}
-                        className="hover:text-gray-200 transition-colors text-sm md:text-base flex items-center justify-center md:justify-start gap-2"
+                        className="hover:underline transition-all text-sm md:text-base flex items-center justify-center md:justify-start gap-2"
                       >
                         <span>{category.name}</span>
                       </Link>
@@ -107,8 +96,8 @@ function Footer() {
               </ul>
             </div>
 
-            {/* Important Links Section - 3 columns on desktop */}
-            <div className="md:col-span-3 text-center md:text-right">
+            {/* Important Links Section - 4 columns on desktop */}
+            <div className="md:col-span-4 text-center md:text-center">
               <h3 className="font-bold text-xl mb-4 border-b-2 border-white/20 pb-2 inline-block">
                 روابط مهمة
               </h3>
@@ -116,7 +105,7 @@ function Footer() {
                 <li>
                   <Link
                     href="/about"
-                    className="hover:text-gray-200 transition-colors text-sm md:text-base flex items-center justify-center md:justify-start gap-2"
+                    className="hover:underline transition-all text-sm md:text-base flex items-center justify-center gap-2"
                   >
                     <span>عن الأوروبية</span>
                   </Link>
@@ -124,7 +113,7 @@ function Footer() {
                 <li>
                   <Link
                     href="/terms"
-                    className="hover:text-gray-200 transition-colors text-sm md:text-base flex items-center justify-center md:justify-start gap-2"
+                    className="hover:underline transition-all text-sm md:text-base flex items-center justify-center gap-2"
                   >
                     <span>شروط الخدمة</span>
                   </Link>
@@ -132,7 +121,7 @@ function Footer() {
                 <li>
                   <Link
                     href="/privacy"
-                    className="hover:text-gray-200 transition-colors text-sm md:text-base flex items-center justify-center md:justify-start gap-2"
+                    className="hover:underline transition-all text-sm md:text-base flex items-center justify-center gap-2"
                   >
                     <span>سياسة الخصوصية</span>
                   </Link>
@@ -140,12 +129,12 @@ function Footer() {
               </ul>
             </div>
 
-            {/* Social Media Section - 3 columns on desktop */}
-            <div className="md:col-span-2 text-center md:text-right">
+            {/* Social Media Section - 4 columns on desktop */}
+            <div className="md:col-span-4 text-center md:text-center">
               <h3 className="font-bold text-xl mb-4 border-b-2 border-white/20 pb-2 inline-block">
-                تابعنا
+                تابع الأوروبية على
               </h3>
-              <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto md:mx-0 mt-6">
+              <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto mt-6">
                 {/* First Row */}
                 <Link
                   href="#"
@@ -222,19 +211,42 @@ function Footer() {
                   />
                 </Link>
               </div>
+              {/* Logo and Description Section - 3 columns on desktop */}
+              <div className="md:col-span-3 text-center md:text-center">
+                <Link
+                  href="/"
+                  title="الصفحة الرئيسية - الأوروبية"
+                  className="inline-block mb-4"
+                >
+                  <Image
+                    src={"/brand.png"}
+                    alt="شعار جريدة الأوروبية"
+                    width={140}
+                    height={140}
+                    className="hover:opacity-90 transition-opacity mt-10"
+                  />
+                </Link>
+                <p>الشبكة الأوروبية للأنباء</p>
+                <div className="text-center">
+                  <p className="text-sm md:text-base">
+                    جميع الحقوق محفوظة &copy; {new Date().getFullYear()}{" "}
+                    الأوروبية
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Copyright Section - Full Width Orange Background */}
-      <div className="border-t border-white/20 py-4 bg-secondaryOther container mx-auto px-4">
+      {/* <div className="border-t border-white/20 py-4 bg-secondaryOther container mx-auto px-4">
         <div className="text-center">
           <p className="text-sm md:text-base text-white">
             جميع الحقوق محفوظة &copy; {new Date().getFullYear()} الأوروبية
           </p>
         </div>
-      </div>
+      </div> */}
     </footer>
   );
 }
