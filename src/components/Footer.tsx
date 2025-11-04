@@ -145,14 +145,15 @@ function Footer() {
               <h3 className="font-bold text-xl mb-4 border-b-2 border-white/20 pb-2 inline-block">
                 تابعنا
               </h3>
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-6">
+              <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto md:mx-0 mt-6">
+                {/* First Row */}
                 <Link
                   href="#"
                   className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
                   title="فيسبوك"
                 >
                   <Image
-                    src={"/sm/Facebook.png"}
+                    src={"/sm/X.png"}
                     alt="فيسبوك"
                     width={32}
                     height={32}
@@ -161,18 +162,11 @@ function Footer() {
                 <Link
                   href="#"
                   className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="تويتر"
-                >
-                  <Image src={"/sm/X.png"} alt="تويتر" width={32} height={32} />
-                </Link>
-                <Link
-                  href="#"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="واتساب"
+                  title="فيسبوك"
                 >
                   <Image
-                    src={"/sm/WhatsApp.png"}
-                    alt="واتساب"
+                    src={"/sm/Facebook.png"}
+                    alt="فيسبوك"
                     width={32}
                     height={32}
                   />
@@ -189,14 +183,16 @@ function Footer() {
                     height={32}
                   />
                 </Link>
+
+                {/* Second Row */}
                 <Link
                   href="#"
                   className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="إنستغرام"
+                  title="واتساب"
                 >
                   <Image
-                    src={"/sm/Instegram.png"}
-                    alt="إنستغرام"
+                    src={"/sm/WhatsApp.png"}
+                    alt="واتساب"
                     width={32}
                     height={32}
                   />
@@ -209,6 +205,18 @@ function Footer() {
                   <Image
                     src={"/sm/Telegram.png"}
                     alt="تيليغرام"
+                    width={32}
+                    height={32}
+                  />
+                </Link>
+                <Link
+                  href="#"
+                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
+                  title="إنستغرام"
+                >
+                  <Image
+                    src={"/sm/Instegram.png"}
+                    alt="إنستغرام"
                     width={32}
                     height={32}
                   />

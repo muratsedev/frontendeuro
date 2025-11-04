@@ -63,89 +63,94 @@ function Up() {
               <span className="text-lg font-medium">{currentDate}</span>
               <IoMdTime className="text-lg" />
             </div>
-          <div>
-            <ul className="flex items-center gap-2 mt-3">
-              <li>
-                <a
-                  href="#"
-                  className="hover:opacity-75 transition-opacity"
-                  title="فيسبوك"
-                >
-                  <Image
-                    src={"/sm/Facebook.png"}
-                    alt="فيسبوك"
-                    width={40}
-                    height={40}
-                  />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:opacity-75 transition-opacity"
-                  title="تويتر"
-                >
-                  <Image src={"/sm/x.png"} alt="تويتر" width={40} height={40} />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:opacity-75 transition-opacity"
-                  title="واتساب"
-                >
-                  <Image
-                    src={"/sm/WhatsApp.png"}
-                    alt="واتساب"
-                    width={40}
-                    height={40}
-                  />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:opacity-75 transition-opacity"
-                  title="يوتيوب"
-                >
-                  <Image
-                    src={"/sm/Youtube.png"}
-                    alt="يوتيوب"
-                    width={40}
-                    height={40}
-                  />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:opacity-75 transition-opacity"
-                  title="إنستغرام"
-                >
-                  <Image
-                    src={"/sm/Instegram.png"}
-                    alt="إنستغرام"
-                    width={40}
-                    height={40}
-                  />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:opacity-75 transition-opacity"
-                  title="تيليغرام"
-                >
-                  <Image
-                    src={"/sm/Telegram.png"}
-                    alt="تيليغرام"
-                    width={40}
-                    height={40}
-                  />
-                </a>
-              </li>
-            </ul>
-          </div>
+            <div>
+              <ul className="flex items-center gap-2 mt-3">
+                <li>
+                  <a
+                    href="#"
+                    className="hover:opacity-75 transition-opacity"
+                    title="فيسبوك"
+                  >
+                    <Image
+                      src={"/sm/Facebook.png"}
+                      alt="فيسبوك"
+                      width={40}
+                      height={40}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:opacity-75 transition-opacity"
+                    title="فيسبوك"
+                  >
+                    <Image
+                      src={"/sm/X.png"}
+                      alt="تويتر"
+                      width={40}
+                      height={40}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:opacity-75 transition-opacity"
+                    title="واتساب"
+                  >
+                    <Image
+                      src={"/sm/WhatsApp.png"}
+                      alt="واتساب"
+                      width={40}
+                      height={40}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:opacity-75 transition-opacity"
+                    title="يوتيوب"
+                  >
+                    <Image
+                      src={"/sm/Youtube.png"}
+                      alt="يوتيوب"
+                      width={40}
+                      height={40}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:opacity-75 transition-opacity"
+                    title="إنستغرام"
+                  >
+                    <Image
+                      src={"/sm/Instegram.png"}
+                      alt="إنستغرام"
+                      width={40}
+                      height={40}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:opacity-75 transition-opacity"
+                    title="تيليغرام"
+                  >
+                    <Image
+                      src={"/sm/Telegram.png"}
+                      alt="تيليغرام"
+                      width={40}
+                      height={40}
+                    />
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         )}
       </div>
