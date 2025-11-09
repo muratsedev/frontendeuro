@@ -66,15 +66,8 @@ const ArticleImage: React.FC<ArticleImageProps> = ({
             className={`${className} absolute inset-0 w-full h-full object-cover ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 z-20`}
             fill
             sizes="100vw"
-            onError={(e) => {
-              console.error('=== IMAGE LOADING ERROR ===');
-              console.error('Original src:', src);
-              console.error('Normalized path:', normalizedSrc);
-              console.error('Backend URL from env:', process.env.NEXT_PUBLIC_API_URL);
-              console.error('hasValidSrc:', hasValidSrc);
-              console.error('Type of src:', typeof src);
-              console.error('Error event:', e);
-              console.error('================================');
+            onError={() => {
+              console.warn('Image failed to load:', normalizedSrc);
               setImageError(true);
               setImageLoading(false);
             }}

@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import NavigationSearch from "./NavigationSearch";
 
 type NavigationLink = {
   id: number;
@@ -92,27 +93,30 @@ const Navigation = () => {
       
       {/* Mobile Menu Button */}
       <div className="lg:hidden flex items-center justify-between px-4 py-3">
-        <button
-          onClick={toggleMenu}
-          className="text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded p-2"
-          aria-label="Toggle menu"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleMenu}
+            className="text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded p-2"
+            aria-label="Toggle menu"
           >
-            {isMenuOpen ? (
-              <path d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isMenuOpen ? (
+                <path d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+          <NavigationSearch />
+        </div>
         <Link href="/" className="flex items-center" onClick={() => {
           console.log('Mobile logo clicked');
           closeMenu();
@@ -130,7 +134,7 @@ const Navigation = () => {
       {/* Navigation Links */}
       <ul className={`
         flex-wrap gap-1 px-2 py-1
-        lg:flex lg:mt-1
+        lg:flex lg:mt-1 lg:items-center
         ${isMenuOpen ? 'flex flex-col' : 'hidden lg:flex'}
       `}>
         {loading ? (
@@ -146,35 +150,42 @@ const Navigation = () => {
             </button>
           </li>
         ) : (
-          links
-            .filter((link) => link && link.href) // Filter out null/undefined links and links without href
-            .map((link) => {
-              console.log('Rendering navigation link:', link);
-              return (
-                <li key={link.id} className="relative group">
-                  <Link 
-                    href={link.href} 
-                    className="px-2 py-1 hover:bg-opacity-80 rounded transition-colors inline-block w-full lg:w-auto text-right lg:text-center"
-                    onClick={() => {
-                      console.log('Navigation link clicked:', link.href);
-                      closeMenu();
-                    }}
-                  >
-                    {link.categorySlug === 'home' ? (
-                      <Image 
-                        src="/img/logo-small-right.png" 
-                        alt="الرئيسية" 
-                        width={20} 
-                        height={8} 
-                        className="h-auto m-0 p-0 hidden lg:block leading-none"
-                      />
-                    ) : (
-                      link.name
-                    )}
-                  </Link>
-                </li>
-              );
-            })
+          <>
+            {links
+              .filter((link) => link && link.href) // Filter out null/undefined links and links without href
+              .map((link) => {
+                console.log('Rendering navigation link:', link);
+                return (
+                  <li key={link.id} className="relative group">
+                    <Link 
+                      href={link.href} 
+                      className="px-2 py-1 hover:bg-opacity-80 rounded transition-colors inline-block w-full lg:w-auto text-right lg:text-center"
+                      onClick={() => {
+                        console.log('Navigation link clicked:', link.href);
+                        closeMenu();
+                      }}
+                    >
+                      {link.categorySlug === 'home' ? (
+                        <Image 
+                          src="/img/logo-small-right.png" 
+                          alt="الرئيسية" 
+                          width={20} 
+                          height={8} 
+                          className="h-auto m-0 p-0 hidden lg:block leading-none"
+                        />
+                      ) : (
+                        link.name
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            
+            {/* Desktop Search - Only visible on large screens */}
+            <li className="hidden lg:block mr-2">
+              <NavigationSearch />
+            </li>
+          </>
         )}
       </ul>
     </nav>
