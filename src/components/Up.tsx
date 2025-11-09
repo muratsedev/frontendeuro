@@ -3,9 +3,20 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { IoMdTime } from "react-icons/io";
 import { useCurrentDate } from "../hooks/useDateFormatting";
+import { BACKEND_API_URL } from "../app/lib/config";
+
+type SocialMedia = {
+  socialMediaId: number;
+  iconName: string;
+  link: string;
+  imagePath: string;
+  isActivated: boolean;
+};
 
 function Up() {
   const [isMounted, setIsMounted] = useState(false);
+  const [socialMedias, setSocialMedias] = useState<SocialMedia[]>([]);
+  const [socialMediaLoading, setSocialMediaLoading] = useState(true);
   
   const currentDate = useCurrentDate({
     format: 'arabic',
@@ -17,6 +28,31 @@ function Up() {
 
   useEffect(() => {
     setIsMounted(true);
+    
+    const fetchSocialMedias = async () => {
+      try {
+        setSocialMediaLoading(true);
+        const response = await fetch(`${BACKEND_API_URL}/api/SocialMedia`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Up social media data fetched:', data);
+        
+        // Filter only activated social media
+        const activeSocialMedias = data.filter((sm: SocialMedia) => sm.isActivated);
+        setSocialMedias(activeSocialMedias);
+      } catch (error) {
+        console.error("Failed to fetch social media", error);
+        setSocialMedias([]);
+      } finally {
+        setSocialMediaLoading(false);
+      }
+    };
+
+    fetchSocialMedias();
   }, []);
   
   return (
@@ -64,92 +100,34 @@ function Up() {
               <IoMdTime className="text-lg" />
             </div>
             <div>
-              <ul className="flex items-center gap-2 mt-3">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:opacity-75 transition-opacity"
-                    title="فيسبوك"
-                  >
-                    <Image
-                      src={"/sm/Facebook.png"}
-                      alt="فيسبوك"
-                      width={40}
-                      height={40}
-                    />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:opacity-75 transition-opacity"
-                    title="فيسبوك"
-                  >
-                    <Image
-                      src={"/sm/X.png"}
-                      alt="تويتر"
-                      width={40}
-                      height={40}
-                    />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:opacity-75 transition-opacity"
-                    title="واتساب"
-                  >
-                    <Image
-                      src={"/sm/WhatsApp.png"}
-                      alt="واتساب"
-                      width={40}
-                      height={40}
-                    />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:opacity-75 transition-opacity"
-                    title="يوتيوب"
-                  >
-                    <Image
-                      src={"/sm/Youtube.png"}
-                      alt="يوتيوب"
-                      width={40}
-                      height={40}
-                    />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:opacity-75 transition-opacity"
-                    title="إنستغرام"
-                  >
-                    <Image
-                      src={"/sm/Instegram.png"}
-                      alt="إنستغرام"
-                      width={40}
-                      height={40}
-                    />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:opacity-75 transition-opacity"
-                    title="تيليغرام"
-                  >
-                    <Image
-                      src={"/sm/Telegram.png"}
-                      alt="تيليغرام"
-                      width={40}
-                      height={40}
-                    />
-                  </a>
-                </li>
-              </ul>
+              {socialMediaLoading ? (
+                <div className="flex items-center gap-2 mt-3">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+                </div>
+              ) : socialMedias.length > 0 ? (
+                <ul className="flex items-center gap-2 mt-3">
+                  {socialMedias.map((sm) => (
+                    <li key={sm.socialMediaId}>
+                      <a
+                        href={sm.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:opacity-75 transition-opacity"
+                        title={sm.iconName}
+                      >
+                        <Image
+                          src={`${BACKEND_API_URL}/${sm.imagePath}`}
+                          alt={sm.iconName}
+                          width={40}
+                          height={40}
+                          className="w-10 h-10 object-contain"
+                          unoptimized
+                        />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           </div>
         )}

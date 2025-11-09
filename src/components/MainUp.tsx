@@ -194,12 +194,9 @@ export default function MainUp() {
               {/* Article content overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <div className="text-center mb-4">
-                  <h2 className="text-white font-bold text-2xl md:text-3xl leading-tight mb-3 text-right text-shadow-outline">
+                  <h2 className="text-white font-bold text-2xl md:text-3xl leading-tight text-right text-shadow-outline">
                     {mainArticle?.articleTitle}
                   </h2>
-                  <p className="text-gray-200 text-base leading-relaxed text-right text-shadow-outline">
-                    {mainArticle?.articleSummary}
-                  </p>
                 </div>
               </div>
             </div>

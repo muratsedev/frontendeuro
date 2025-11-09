@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
+import { BACKEND_API_URL } from "../app/lib/config";
 
 type BreakingNewsItem = {
   id: number;
@@ -21,7 +22,7 @@ const BreakingNews = () => {
   // Function to update breaking news published status
   const updateBreakingNewsStatus = useCallback(async (id: number, isPublished: boolean) => {
     try {
-      const response = await fetch(`/api/breaking-news/${id}`, {
+      const response = await fetch(`${BACKEND_API_URL}/api/BreakingNews/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -153,14 +154,15 @@ const BreakingNews = () => {
     const fetchBreakingNews = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/breaking-news');
+        const response = await fetch(`${BACKEND_API_URL}/api/BreakingNews`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
-        console.log('Breaking news data fetched:', data);
+        console.log('Breaking News API - Received items:', data.length);
+        console.log('Breaking News API - Final items count:', data.filter((news: BreakingNewsItem) => news.isPublished).length);
         
         // Filter only published breaking news
         const publishedNews = data.filter((news: BreakingNewsItem) => news.isPublished);

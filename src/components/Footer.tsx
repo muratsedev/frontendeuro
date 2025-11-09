@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { BACKEND_API_URL } from "../app/lib/config";
 
 type CategoryLink = {
   id: number;
@@ -11,9 +12,19 @@ type CategoryLink = {
   href: string;
 };
 
+type SocialMedia = {
+  socialMediaId: number;
+  iconName: string;
+  link: string;
+  imagePath: string;
+  isActivated: boolean;
+};
+
 function Footer() {
   const [categories, setCategories] = useState<CategoryLink[]>([]);
+  const [socialMedias, setSocialMedias] = useState<SocialMedia[]>([]);
   const [loading, setLoading] = useState(true);
+  const [socialMediaLoading, setSocialMediaLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -42,7 +53,31 @@ function Footer() {
       }
     };
 
+    const fetchSocialMedias = async () => {
+      try {
+        setSocialMediaLoading(true);
+        const response = await fetch(`${BACKEND_API_URL}/api/SocialMedia`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Footer social media data fetched:', data);
+        
+        // Filter only activated social media
+        const activeSocialMedias = data.filter((sm: SocialMedia) => sm.isActivated);
+        setSocialMedias(activeSocialMedias);
+      } catch (error) {
+        console.error("Failed to fetch social media", error);
+        setSocialMedias([]);
+      } finally {
+        setSocialMediaLoading(false);
+      }
+    };
+
     fetchCategories();
+    fetchSocialMedias();
   }, []);
 
   // Split categories into two columns for better layout
@@ -134,83 +169,35 @@ function Footer() {
               <h3 className="font-bold text-xl mb-4 border-b-2 border-white/20 pb-2 inline-block">
                 تابع الأوروبية على
               </h3>
-              <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto mt-6">
-                {/* First Row */}
-                <Link
-                  href="#"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="فيسبوك"
-                >
-                  <Image
-                    src={"/sm/X.png"}
-                    alt="فيسبوك"
-                    width={32}
-                    height={32}
-                  />
-                </Link>
-                <Link
-                  href="#"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="فيسبوك"
-                >
-                  <Image
-                    src={"/sm/Facebook.png"}
-                    alt="فيسبوك"
-                    width={32}
-                    height={32}
-                  />
-                </Link>
-                <Link
-                  href="#"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="يوتيوب"
-                >
-                  <Image
-                    src={"/sm/Youtube.png"}
-                    alt="يوتيوب"
-                    width={32}
-                    height={32}
-                  />
-                </Link>
-
-                {/* Second Row */}
-                <Link
-                  href="#"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="واتساب"
-                >
-                  <Image
-                    src={"/sm/WhatsApp.png"}
-                    alt="واتساب"
-                    width={32}
-                    height={32}
-                  />
-                </Link>
-                <Link
-                  href="#"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="تيليغرام"
-                >
-                  <Image
-                    src={"/sm/Telegram.png"}
-                    alt="تيليغرام"
-                    width={32}
-                    height={32}
-                  />
-                </Link>
-                <Link
-                  href="#"
-                  className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
-                  title="إنستغرام"
-                >
-                  <Image
-                    src={"/sm/Instegram.png"}
-                    alt="إنستغرام"
-                    width={32}
-                    height={32}
-                  />
-                </Link>
-              </div>
+              {socialMediaLoading ? (
+                <div className="text-center py-6">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 mx-auto"></div>
+                </div>
+              ) : socialMedias.length > 0 ? (
+                <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto mt-6">
+                  {socialMedias.map((sm) => (
+                    <Link
+                      key={sm.socialMediaId}
+                      href={sm.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
+                      title={sm.iconName}
+                    >
+                      <Image
+                        src={`${BACKEND_API_URL}/${sm.imagePath}`}
+                        alt={sm.iconName}
+                        width={32}
+                        height={32}
+                        className="w-8 h-8 object-contain"
+                        unoptimized
+                      />
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-400 text-sm mt-4">لا توجد وسائل تواصل متاحة</p>
+              )}
               {/* Logo and Description Section - 3 columns on desktop */}
               <div className="md:col-span-3 text-center md:text-center">
                 <Link
