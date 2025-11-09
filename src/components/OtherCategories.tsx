@@ -103,10 +103,10 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
             href={`/${article.categoryId}/${article.id}`}
             className="block"
           >
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer h-[380px] flex flex-col">
               {article.imagePath && article.imagePath.trim() !== '' ? (
                 <>
-                  <div className="w-full h-[300px] relative group">
+                  <div className="w-full h-[220px] relative group flex-shrink-0">
                     {/* Use <Image> for normal URLs, <img> for blob URLs */}
                     {/*
                       Use <Image> for normal URLs to get Next.js optimization and avoid warnings.
@@ -133,17 +133,17 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                     
                     {/* Article title overlay on image */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
-                      <h3 className="text-white font-bold text-lg md:text-xl leading-tight text-right article-title-shadow">
+                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
+                      <h3 className="text-white font-bold text-lg md:text-xl leading-tight text-right article-title-shadow line-clamp-2">
                         {article.articleTitle}
                       </h3>
                     </div>
                   </div>
                   
                   {/* Content below image */}
-                  <div className="p-4">
+                  <div className="p-2.5 flex-1 flex flex-col">
                     {/* Date with icon */}
-                    <div className="flex items-center justify-end gap-2 mb-3 text-gray-600">
+                    <div className="flex items-center justify-end gap-2 mb-1.5 text-gray-600">
                       <span className="text-sm">
                         {formatDateArabic(new Date(article.createdDate), { showHijri: false, showGregorian: true })}
                       </span>
@@ -160,20 +160,20 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
                 </>
               ) : (
                 <>
-                  <div className="w-full h-[300px] bg-gray-100 flex items-center justify-center rounded-t-xl relative">
+                  <div className="w-full h-[220px] bg-gray-100 flex items-center justify-center rounded-t-xl relative flex-shrink-0">
                     <span className="text-gray-400">لا توجد صورة</span>
                     {/* Title overlay even for placeholder */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
-                      <h3 className="text-white font-bold text-lg md:text-xl leading-tight text-right article-title-shadow">
+                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
+                      <h3 className="text-white font-bold text-lg md:text-xl leading-tight text-right article-title-shadow line-clamp-2">
                         {article.articleTitle}
                       </h3>
                     </div>
                   </div>
                   
                   {/* Content below image */}
-                  <div className="p-4">
+                  <div className="p-2.5 flex-1 flex flex-col">
                     {/* Date with icon */}
-                    <div className="flex items-center justify-end gap-2 mb-3 text-gray-600">
+                    <div className="flex items-center justify-end gap-2 mb-1.5 text-gray-600">
                       <span className="text-sm">
                         {formatDateArabic(new Date(article.createdDate), { showHijri: false, showGregorian: true })}
                       </span>
