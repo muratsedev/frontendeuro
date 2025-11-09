@@ -14,37 +14,62 @@ type NavigationLink = {
 const Navigation = () => {
   const [links, setLinks] = useState<NavigationLink[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [usingFallback, setUsingFallback] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const fetchLinks = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/navigation');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log('Navigation data fetched:', data);
-        setLinks(data);
-      } catch (error) {
-        console.error("Failed to fetch navigation links", error);
-        
-        // Fallback to static links if API fails
-        const fallbackLinks = [
-          { id: 0, name: "Logo", categorySlug: "home", isActivated: true, href: "/" },
-          // { id: 998, name: "عنا", categorySlug: "about", isActivated: true, href: "/about" },
-          // { id: 999, name: "اتصل بنا", categorySlug: "contact", isActivated: true, href: "/contact" }
-        ];
-        setLinks(fallbackLinks);
-      } finally {
-        setLoading(false);
+  const fetchLinks = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log('Fetching navigation links from backend API...');
+      
+      const response = await fetch('/api/navigation');
+      
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
-    };
+      
+      const data = await response.json();
+      
+      // Check if response contains an error (backend API failed)
+      if (data.error && !data.fallback) {
+        throw new Error(`Backend API error: ${data.details}`);
+      }
+      
+      // Handle fallback response format
+      const navigationLinks = data.links || data;
+      
+      if (data.fallback) {
+        console.log('Using fallback navigation due to backend issues:', data.error);
+        setError(`Backend unavailable: ${data.error}`);
+        setUsingFallback(true);
+      } else {
+        console.log('Navigation data fetched successfully from backend:', navigationLinks);
+        setUsingFallback(false);
+      }
+      
+      setLinks(navigationLinks);
+      
+    } catch (error) {
+      console.error("Failed to fetch navigation links from backend", error);
+      setError(error instanceof Error ? error.message : 'Unknown error');
+      setUsingFallback(false);
+      
+      // Only use fallback if backend is completely unavailable
+      const fallbackLinks = [
+        { id: 0, name: "Logo", categorySlug: "home", isActivated: true, href: "/" },
+      ];
+      console.log('Using minimal fallback - backend connection failed');
+      setLinks(fallbackLinks);
+      
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchLinks();
   }, []);
 
@@ -58,6 +83,13 @@ const Navigation = () => {
 
   return (
     <nav ref={navRef} className="container mx-auto bg-primaryOther font-bold text-white">
+      {/* Fallback indicator */}
+      {usingFallback && (
+        <div className="bg-yellow-600 text-yellow-100 text-xs px-2 py-1 text-center">
+          ⚠️ استخدام القوائم المحلية - الخادم غير متاح
+        </div>
+      )}
+      
       {/* Mobile Menu Button */}
       <div className="lg:hidden flex items-center justify-between px-4 py-3">
         <button
@@ -81,7 +113,10 @@ const Navigation = () => {
             )}
           </svg>
         </button>
-        <Link href="/" className="flex items-center" onClick={closeMenu}>
+        <Link href="/" className="flex items-center" onClick={() => {
+          console.log('Mobile logo clicked');
+          closeMenu();
+        }}>
           <Image 
             src="/img/logo-small-right.png" 
             alt="الرئيسية" 
@@ -99,31 +134,47 @@ const Navigation = () => {
         ${isMenuOpen ? 'flex flex-col' : 'hidden lg:flex'}
       `}>
         {loading ? (
-          <li className="px-2 py-1">جاري التحميل...</li>
+          <li className="px-2 py-1">جاري تحميل القوائم من الخادم...</li>
+        ) : error ? (
+          <li className="px-2 py-1 text-red-300 flex items-center gap-2">
+            <span>فشل في تحميل القوائم من الخادم</span>
+            <button 
+              onClick={fetchLinks}
+              className="text-xs bg-red-500 hover:bg-red-600 px-2 py-1 rounded"
+            >
+              إعادة المحاولة
+            </button>
+          </li>
         ) : (
           links
             .filter((link) => link && link.href) // Filter out null/undefined links and links without href
-            .map((link) => (
-            <li key={link.id} className="relative group">
-              <Link 
-                href={link.href} 
-                className="px-2 py-1 hover:bg-opacity-80 rounded transition-colors inline-block w-full lg:w-auto text-right lg:text-center"
-                onClick={closeMenu}
-              >
-                {link.categorySlug === 'home' ? (
-                  <Image 
-                    src="/img/logo-small-right.png" 
-                    alt="الرئيسية" 
-                    width={20} 
-                    height={8} 
-                    className="h-auto m-0 p-0 hidden lg:block leading-none"
-                  />
-                ) : (
-                  link.name
-                )}
-              </Link>
-            </li>
-          ))
+            .map((link) => {
+              console.log('Rendering navigation link:', link);
+              return (
+                <li key={link.id} className="relative group">
+                  <Link 
+                    href={link.href} 
+                    className="px-2 py-1 hover:bg-opacity-80 rounded transition-colors inline-block w-full lg:w-auto text-right lg:text-center"
+                    onClick={() => {
+                      console.log('Navigation link clicked:', link.href);
+                      closeMenu();
+                    }}
+                  >
+                    {link.categorySlug === 'home' ? (
+                      <Image 
+                        src="/img/logo-small-right.png" 
+                        alt="الرئيسية" 
+                        width={20} 
+                        height={8} 
+                        className="h-auto m-0 p-0 hidden lg:block leading-none"
+                      />
+                    ) : (
+                      link.name
+                    )}
+                  </Link>
+                </li>
+              );
+            })
         )}
       </ul>
     </nav>

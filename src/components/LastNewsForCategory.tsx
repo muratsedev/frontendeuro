@@ -91,7 +91,7 @@ const LastNewsForCategory = ({ categoryId, className = '' }: LastNewsForCategory
             <div key={article.id}>
               <Link 
                 href={`/article/${article.id}`}
-                className="block hover:bg-gray-50 transition-colors duration-200 p-2 rounded"
+                className="block transition-colors duration-200 p-2 rounded"
               >
                 <div className="flex gap-3 items-start">
                   {/* Article Image */}
@@ -110,7 +110,7 @@ const LastNewsForCategory = ({ categoryId, className = '' }: LastNewsForCategory
                   
                   {/* Article Content */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm text-right line-clamp-2 mb-1 text-gray-900 hover:text-primaryOther transition-colors">
+                    <h3 className="font-semibold text-sm text-right line-clamp-2 mb-1 text-gray-900 hover:underline transition-all duration-200">
                       {article.articleTitle}
                     </h3>
                     <div className="flex items-center gap-1 justify-end">

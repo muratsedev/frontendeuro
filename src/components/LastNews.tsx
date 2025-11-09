@@ -94,7 +94,7 @@ const LastNews = ({ className = '' }: LastNewsProps) => {
           <div className="space-y-2">
             {articles.map((article, index) => (
               <div key={article.id} className="relative">
-                <div className="bg-gray-50 hover:bg-blue-50 rounded-lg p-2 transition-colors duration-200">
+                <div className="rounded-lg p-2 transition-colors duration-200">
                   <ArticleCard
                     article={article}
                     variant="compact"

@@ -76,7 +76,7 @@ const ArticleCard = ({
         className="block"
         onClick={handleClick}
       >
-        <div className="flex gap-3 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow hover:bg-gray-50">
+        <div className="flex gap-3 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
           {showImage && article.imagePath && article.imagePath.trim() !== '' && (
             <div className="w-16 h-16 flex-shrink-0 relative overflow-hidden rounded">
               <ArticleImage
@@ -92,7 +92,7 @@ const ArticleCard = ({
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-sm text-right line-clamp-2 mb-1 hover:text-blue-600 transition-colors">
+            <h3 className="font-semibold text-sm text-right line-clamp-2 mb-1 hover:underline transition-all duration-200">
               {article.articleTitle}
             </h3>
             <div className="flex items-center gap-1 justify-end">
