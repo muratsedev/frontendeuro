@@ -93,7 +93,20 @@ const Navigation = () => {
       
       {/* Mobile Menu Button */}
       <div className="lg:hidden flex items-center justify-between px-4 py-3">
+        <Link href="/" className="flex items-center" onClick={() => {
+          console.log('Mobile logo clicked');
+          closeMenu();
+        }}>
+          <Image 
+            src="/img/logo-small-right.png" 
+            alt="الرئيسية" 
+            width={20} 
+            height={8} 
+            className="h-auto"
+          />
+        </Link>
         <div className="flex items-center gap-2">
+          <NavigationSearch />
           <button
             onClick={toggleMenu}
             className="text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 rounded p-2"
@@ -115,20 +128,7 @@ const Navigation = () => {
               )}
             </svg>
           </button>
-          <NavigationSearch />
         </div>
-        <Link href="/" className="flex items-center" onClick={() => {
-          console.log('Mobile logo clicked');
-          closeMenu();
-        }}>
-          <Image 
-            src="/img/logo-small-right.png" 
-            alt="الرئيسية" 
-            width={20} 
-            height={8} 
-            className="h-auto"
-          />
-        </Link>
       </div>
 
       {/* Navigation Links */}

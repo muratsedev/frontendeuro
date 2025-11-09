@@ -1,5 +1,6 @@
 'use client'
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { IoMdTime } from "react-icons/io";
 import { useCurrentDate } from "../hooks/useDateFormatting";
@@ -60,8 +61,8 @@ function Up() {
       <div className="grid grid-cols-3 gap-4 items-center">
         {/* Left Section - Arabic Text (was on right) */}
         <div className="flex flex-col items-start text-left md:items-start justify-center md:justify-start col-span-3 md:col-span-1">
-          <a
-            href="#"
+          <Link
+            href="/"
             title="الصفحة الرئيسية - الأوروبية"
             className="hover:opacity-90 transition-opacity mx-auto md:mx-0"
           >
@@ -72,7 +73,7 @@ function Up() {
               height={140}
               className="max-w-full h-auto"
             />
-          </a>
+          </Link>
         </div>
 
         {/* Center Section - Logo */}

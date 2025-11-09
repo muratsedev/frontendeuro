@@ -20,7 +20,7 @@ const ARTICLES_API_URL = `${BASE_URL}/api/Articles`;
 
 // Configure axios to handle HTTPS development certificates
 const axiosInstance = axios.create({
-    timeout: 10000,
+    timeout: 30000, // Increased timeout to 30 seconds
     httpsAgent: process.env.NODE_ENV === 'development' ? 
         new https.Agent({ rejectUnauthorized: false }) : undefined
 });

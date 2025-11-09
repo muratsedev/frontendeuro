@@ -27,7 +27,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.
 
 // Configure axios to handle HTTPS development certificates
 const axiosInstance = axios.create({
-    timeout: 10000,
+    timeout: 30000, // Increased timeout to 30 seconds
     httpsAgent: process.env.NODE_ENV === 'development' ? 
         new https.Agent({ rejectUnauthorized: false }) : undefined
 });

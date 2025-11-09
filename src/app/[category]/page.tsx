@@ -124,12 +124,12 @@ const CategoryRootPage = () => {
                               `${process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`
                             }
                             alt={article.articleTitle || "Food Image"}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                             fallbackElement={
                               <ArticleImage
                                 src={`${process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`}
                                 alt="Food Image Fallback"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-contain"
                                 fallbackElement={
                                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                                     <span className="text-gray-400 text-lg">

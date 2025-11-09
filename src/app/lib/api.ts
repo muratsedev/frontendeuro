@@ -12,7 +12,7 @@ const httpsAgent = new https.Agent({
 });
 
 axios.defaults.httpsAgent = httpsAgent;
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 30000; // Increased timeout to 30 seconds
 
 export const getArticles = async (): Promise<AllArticles[]> => {
     try {
