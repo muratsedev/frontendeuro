@@ -163,7 +163,7 @@ export default function MainUp() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <h3 className="text-white font-bold text-lg leading-tight text-right text-shadow-outline">
+                <h3 className="text-white font-bold text-lg leading-tight text-right text-shadow-outline group-hover:underline transition-all duration-300">
                   {article.articleTitle}
                 </h3>
               </div>
@@ -194,7 +194,7 @@ export default function MainUp() {
               {/* Article content overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <div className="text-center mb-4">
-                  <h2 className="text-white font-bold text-2xl md:text-3xl leading-tight text-right text-shadow-outline">
+                  <h2 className="text-white font-bold text-2xl md:text-3xl leading-tight text-right text-shadow-outline group-hover:underline transition-all duration-300">
                     {mainArticle?.articleTitle}
                   </h2>
                 </div>
@@ -226,7 +226,7 @@ export default function MainUp() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <h3 className="text-white font-bold text-lg leading-tight text-right text-shadow-outline">
+                <h3 className="text-white font-bold text-lg leading-tight text-right text-shadow-outline group-hover:underline transition-all duration-300">
                   {article.articleTitle}
                 </h3>
               </div>
@@ -258,7 +258,7 @@ export default function MainUp() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-4">
-              <h3 className="text-white font-bold text-lg leading-tight text-right text-shadow-outline">
+              <h3 className="text-white font-bold text-lg leading-tight text-right text-shadow-outline group-hover:underline transition-all duration-300">
                 {article.articleTitle}
               </h3>
             </div>

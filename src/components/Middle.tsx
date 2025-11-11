@@ -5,6 +5,7 @@ import OtherCategories from './OtherCategories';
 import { categoriesApi } from '../app/lib/api';
 import { AllCategories } from '../app/types/Articles';
 import LastNews from './LastNews';
+import EditorChoice from './EditorChoice';
 
 const Middle: React.FC = () => {
   const [categories, setCategories] = useState<AllCategories[]>([]);
@@ -101,17 +102,32 @@ const Middle: React.FC = () => {
             ))}
           </div>
           
-          {/* Right Sidebar - Last News */}
+          {/* Right Sidebar - Editor Choice and Last News */}
           <div className="col-span-12 lg:col-span-3">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
-              <div className="text-primaryOther mx-2">
-                <p className="text-xs sm:text-sm font-semibold">آخر الأخبار</p>
+            {/* Editor Choice Section */}
+            <div className="mb-6">
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
+                <div className="text-primaryOther mx-2">
+                  <p className="text-xs sm:text-sm font-semibold">اختيار المحرر</p>
+                </div>
+                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
               </div>
-              <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
+              <EditorChoice />
             </div>
-            <div className="sticky top-4">
-              <LastNews />
+
+            {/* Last News Section */}
+            <div>
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
+                <div className="text-primaryOther mx-2">
+                  <p className="text-xs sm:text-sm font-semibold">آخر الأخبار</p>
+                </div>
+                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
+              </div>
+              <div className="sticky top-4">
+                <LastNews />
+              </div>
             </div>
           </div>
         </div>

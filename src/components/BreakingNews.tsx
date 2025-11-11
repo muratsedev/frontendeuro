@@ -154,10 +154,27 @@ const BreakingNews = () => {
     const fetchBreakingNews = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_API_URL}/api/BreakingNews`);
+        
+        // Check if BACKEND_API_URL is defined
+        if (!BACKEND_API_URL) {
+          console.error('BACKEND_API_URL is not defined');
+          setBreakingNews([]);
+          return;
+        }
+        
+        const response = await fetch(`${BACKEND_API_URL}/api/BreakingNews`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          // Add timeout and error handling
+          signal: AbortSignal.timeout(10000) // 10 second timeout
+        });
         
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          console.error(`HTTP error! status: ${response.status}`);
+          setBreakingNews([]);
+          return;
         }
         
         const data = await response.json();
@@ -174,6 +191,7 @@ const BreakingNews = () => {
         setupCountdownTimers(data);
       } catch (error) {
         console.error("Failed to fetch breaking news", error);
+        // Don't throw error, just set empty array to prevent UI from breaking
         setBreakingNews([]);
       } finally {
         setLoading(false);
@@ -182,11 +200,12 @@ const BreakingNews = () => {
 
     fetchBreakingNews();
 
-    // Set up periodic check every 30 seconds to ensure expired news are caught
-    const periodicCheck = setInterval(() => {
+    // Set up periodic check every 60 seconds to ensure expired news are caught
+    // Only if we have a valid API URL
+    const periodicCheck = BACKEND_API_URL ? setInterval(() => {
       console.log('Performing periodic check for expired breaking news...');
       fetchBreakingNews();
-    }, 30000); // Check every 30 seconds
+    }, 60000) : null; // Check every 60 seconds
 
     // Cleanup timers on unmount
     return () => {
@@ -194,9 +213,11 @@ const BreakingNews = () => {
       expirationTimers.clear();
       countdownTimers.forEach(timer => clearInterval(timer));
       countdownTimers.clear();
-      clearInterval(periodicCheck);
+      if (periodicCheck) {
+        clearInterval(periodicCheck);
+      }
     };
-  }, [updateBreakingNewsStatus]);
+  }, [updateBreakingNewsStatus, formatTimeRemaining]);
 
   // Auto-rotate breaking news items
   useEffect(() => {

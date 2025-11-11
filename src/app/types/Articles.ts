@@ -9,6 +9,7 @@ export interface AllArticles {
     isPublished: boolean
     facebook: boolean
     twitter: boolean
+    editorChoice?: boolean
     categoryId: number
     tagId: number
     tagName: string

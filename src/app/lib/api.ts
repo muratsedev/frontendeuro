@@ -91,5 +91,14 @@ export const articlesApi = {
       throw error;
     }
   },
+  getEditorChoice: async (): Promise<AllArticles[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/Articles/EditorChoice`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching editor choice articles:', error);
+      throw error;
+    }
+  },
 };
 
