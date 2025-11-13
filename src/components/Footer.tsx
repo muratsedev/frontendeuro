@@ -86,7 +86,7 @@ function Footer() {
         });
 
         // Filter only activated social media
-        const activeSocialMedias = normalized.filter((sm) => sm.isActivated === true);
+        const activeSocialMedias = normalized.filter((sm: SocialMedia) => sm.isActivated === true);
         setSocialMedias(activeSocialMedias);
       } catch (error) {
         console.error("Failed to fetch social media", error);
@@ -100,15 +100,9 @@ function Footer() {
     fetchSocialMedias();
   }, []);
 
-  // Split categories into two columns for better layout
-
   return (
     // <footer className="text-white">
     <footer className="text-gray-600 mt-5">
-      <div className="container mx-auto px-4 flex flex-col-reverse divide-y-4 divide-y-reverse divide-gray-200">
-        <div></div>
-        <div></div>
-      </div>
       {/* Green Background Section with Container */}
       {/* <div className="bg-primaryOther container mx-auto px-4"> */}
       <div className="container mx-auto px-4">
@@ -195,7 +189,7 @@ function Footer() {
                 </div>
               ) : socialMedias.length > 0 ? (
                 <div className="flex flex-row justify-center items-center gap-3 mt-2">
-                  {socialMedias.map((sm) => (
+                  {socialMedias.map((sm: SocialMedia) => (
                     <Link
                       key={sm.socialMediaId}
                       href={sm.link}
@@ -218,28 +212,29 @@ function Footer() {
               ) : (
                 <p className="text-gray-400 text-sm mt-4">لا توجد وسائل تواصل متاحة</p>
               )}
-              {/* Logo and Description Section - 3 columns on desktop */}
-              <div className="md:col-span-3 text-center md:text-center">
-                <Link
-                  href="/"
-                  title="الصفحة الرئيسية - الأوروبية"
-                  className="inline-block mb-4"
-                >
-                  <Image
-                    src={"/brand.png"}
-                    alt="شعار جريدة الأوروبية"
-                    width={140}
-                    height={140}
-                    className="hover:opacity-90 transition-opacity mt-10"
-                  />
-                </Link>
-                <p>الشبكة الأوروبية للأنباء</p>
-                <div className="text-center">
-                  <p className="text-sm md:text-base">
-                    جميع الحقوق محفوظة &copy; {new Date().getFullYear()}{" "}
-                    الأوروبية
-                  </p>
-                </div>
+            </div>
+
+            {/* Logo and Description Section - 12 columns on desktop (full width) */}
+            <div className="md:col-span-12 text-center md:text-center border-t border-gray-200 pt-8 mt-4">
+              <Link
+                href="/"
+                title="الصفحة الرئيسية - الأوروبية"
+                className="inline-block mb-4"
+              >
+                <Image
+                  src={"/brand.png"}
+                  alt="شعار جريدة الأوروبية"
+                  width={140}
+                  height={140}
+                  className="hover:opacity-90 transition-opacity"
+                />
+              </Link>
+              <p className="mb-2">الشبكة الأوروبية للأنباء</p>
+              <div className="text-center">
+                <p className="text-sm md:text-base">
+                  جميع الحقوق محفوظة &copy; {new Date().getFullYear()}{" "}
+                  الأوروبية
+                </p>
               </div>
             </div>
           </div>
