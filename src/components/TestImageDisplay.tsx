@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import ArticleImage from './ArticleImage';
 
 interface TestImageDisplayProps {
@@ -47,19 +48,20 @@ const TestImageDisplay: React.FC<TestImageDisplayProps> = ({
 
       {/* Direct img tag for comparison */}
       <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2">Direct img tag (for comparison):</h3>
+        <h3 className="text-lg font-semibold mb-2">Direct Next.js Image (for comparison):</h3>
         <div className="relative w-full h-48 border border-gray-200 rounded-lg overflow-hidden">
-          <img
+          <Image
             src={imageUrl}
             alt={description || "test image"}
             className="w-full h-full object-cover"
-            loading="eager"
-            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              console.error('Direct img tag failed to load:', imageUrl);
-              (e.target as HTMLImageElement).style.display = 'none';
+            fill
+            sizes="100vw"
+            priority
+            onError={() => {
+              console.error('Next.js Image tag failed to load:', imageUrl);
             }}
             onLoad={() => {
-              console.log('Direct img tag loaded successfully:', imageUrl);
+              console.log('Next.js Image tag loaded successfully:', imageUrl);
             }}
           />
         </div>
