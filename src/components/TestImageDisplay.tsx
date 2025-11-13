@@ -51,9 +51,9 @@ const TestImageDisplay: React.FC<TestImageDisplayProps> = ({
         <div className="relative w-full h-48 border border-gray-200 rounded-lg overflow-hidden">
           <img
             src={imageUrl}
-            alt={description}
+            alt={description || "test image"}
             className="w-full h-full object-cover"
-            onError={(e) => {
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
               console.error('Direct img tag failed to load:', imageUrl);
               (e.target as HTMLImageElement).style.display = 'none';
             }}

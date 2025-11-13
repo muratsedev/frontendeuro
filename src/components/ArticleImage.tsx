@@ -8,13 +8,17 @@ interface ArticleImageProps {
   alt: string;
   className?: string;
   fallbackElement?: React.ReactNode;
+  fit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  position?: string;
 }
 
 const ArticleImage: React.FC<ArticleImageProps> = ({
   src,
   alt,
   className = "",
-  fallbackElement
+  fallbackElement,
+  fit = 'cover',
+  position = 'center'
 }) => {
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
@@ -60,24 +64,25 @@ const ArticleImage: React.FC<ArticleImageProps> = ({
       {/* Use Next.js Image component for optimization */}
       {!imageError && (
         <>
-          <Image
-            src={normalizedSrc}
-            alt={alt}
-            className={`${className} absolute inset-0 w-full h-full object-cover ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 z-20`}
-            fill
-            sizes="100vw"
-            onError={() => {
-              console.warn('Image failed to load:', normalizedSrc);
-              setImageError(true);
-              setImageLoading(false);
-            }}
-            onLoad={() => {
-              console.log('=== IMAGE LOADED SUCCESSFULLY ===');
-              console.log('Loaded image:', normalizedSrc);
-              setImageLoading(false);
-            }}
-            unoptimized // Remove this line if you want Next.js to optimize remote images
-          />
+              <Image
+                src={normalizedSrc}
+                alt={alt}
+                className={`${className} absolute inset-0 w-full h-full ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 z-20`}
+                style={{ objectFit: (fit || 'cover') as React.CSSProperties['objectFit'], objectPosition: position || 'center' }}
+                fill
+                sizes="100vw"
+                onError={() => {
+                  console.warn('Image failed to load:', normalizedSrc);
+                  setImageError(true);
+                  setImageLoading(false);
+                }}
+                onLoad={() => {
+                  console.log('=== IMAGE LOADED SUCCESSFULLY ===');
+                  console.log('Loaded image:', normalizedSrc);
+                  setImageLoading(false);
+                }}
+                unoptimized // Remove this line if you want Next.js to optimize remote images
+              />
         </>
       )}
     </div>

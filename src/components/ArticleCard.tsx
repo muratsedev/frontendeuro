@@ -128,14 +128,14 @@ const ArticleCard = ({
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent z-10" />
               {/* Article title on image */}
               <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
-                <h2 className="text-lg font-bold text-right line-clamp-2 text-white article-title-shadow">
+                <h2 className="text-lg font-bold text-right line-clamp-3 text-white article-title-shadow whitespace-normal break-words leading-tight">
                   {article.articleTitle}
                 </h2>
               </div>
             </div>
             {/* Date and Summary below image */}
             <div className="p-4">
-              <p className="text-gray-600 text-right line-clamp-2 mb-2 text-sm">
+              <p className="text-gray-600 text-right line-clamp-3 mb-2 text-sm whitespace-normal break-words">
                 {article.articleSummary}
               </p>
               <span className="text-sm text-gray-500">
@@ -146,10 +146,10 @@ const ArticleCard = ({
         )}
         {(!showImage || !article.imagePath || article.imagePath.trim() === '') && (
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-2 text-right line-clamp-2">
+            <h2 className="text-xl font-semibold mb-2 text-right line-clamp-3 whitespace-normal break-words">
               {article.articleTitle}
             </h2>
-            <p className="text-gray-600 mb-4 text-right line-clamp-3">
+            <p className="text-gray-600 mb-4 text-right line-clamp-4 whitespace-normal break-words">
               {article.articleSummary}
             </p>
             <span className="text-sm text-gray-500">

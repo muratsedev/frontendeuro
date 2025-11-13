@@ -8,6 +8,7 @@ type NavigationLink = {
     categorySlug: string;
     isActivated: boolean;
     href: string;
+    isShowInFooter?: boolean;
 };
 
 type CategoryResponse = {
@@ -15,6 +16,7 @@ type CategoryResponse = {
     name: string;
     categorySlug: string;
     isActivated: boolean;
+    isShowInFooter?: boolean; // may come as IsShowInFooter from backend
 };
 
 // Backend API configuration
@@ -70,16 +72,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Transform backend data to NavigationLink format
             const dynamicLinks: NavigationLink[] = categories
                 .filter((category: CategoryResponse) => {
-                    console.log(`Category ${category.name} (${category.categorySlug}) - activated: ${category.isActivated}`);
-                    return category.isActivated;
+                    const showInFooter = category.isShowInFooter ?? false;
+                    console.log(`Category ${category.name} (${category.categorySlug}) - activated: ${category.isActivated} - showInFooter: ${showInFooter}`);
+                    return category.isActivated === true && showInFooter === true;
                 })
                 .map((category: CategoryResponse) => ({
                     id: category.id,
                     name: category.name,
                     categorySlug: category.categorySlug,
                     isActivated: category.isActivated,
-                    href: `/${category.categorySlug}` // Route to category pages
-                }));
+                    href: `/${category.categorySlug}`,// Route to category pages
+                    // include normalized flag for downstream consumers
+                    isShowInFooter: category.isShowInFooter ?? false
+                } as NavigationLink));
 
             // Always include the logo/home link
             const homeLink: NavigationLink = { 

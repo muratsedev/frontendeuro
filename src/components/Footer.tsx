@@ -10,6 +10,7 @@ type CategoryLink = {
   categorySlug: string;
   isActivated: boolean;
   href: string;
+  isShowInFooter?: boolean;
 };
 
 type SocialMedia = {
@@ -38,12 +39,19 @@ function Footer() {
         
         const data = await response.json();
         console.log('Footer categories data fetched:', data);
-        
+
         // Filter out non-category links (home, about, contact)
-        const categoryLinks = data.filter((link: CategoryLink) => 
-          link.id !== 0 && link.id !== 998 && link.id !== 999
-        );
-        
+        // and only include categories that are marked to show in footer.
+        const categoryLinks = (data || []).filter((link: unknown) => {
+          if (!link) return false;
+          const linkObj = link as Record<string, unknown>;
+          const id = linkObj.id as number | undefined;
+          if (id === 0 || id === 998 || id === 999) return false;
+          // Check normalized property or PascalCase from backend
+          const showInFooter = (linkObj.isShowInFooter ?? linkObj.IsShowInFooter) === true;
+          return showInFooter;
+        });
+
         setCategories(categoryLinks);
       } catch (error) {
         console.error("Failed to fetch footer categories", error);
@@ -64,9 +72,21 @@ function Footer() {
         
         const data = await response.json();
         console.log('Footer social media data fetched:', data);
-        
+
+        // Normalize keys from backend (PascalCase) to frontend camelCase
+        const normalized = (data || []).map((sm: unknown) => {
+          const smObj = sm as Record<string, unknown>;
+          return {
+            socialMediaId: (smObj.socialMediaId ?? smObj.SocialMediaId) as number,
+            iconName: (smObj.iconName ?? smObj.IconName) as string,
+            link: (smObj.link ?? smObj.Link) as string,
+            imagePath: (smObj.imagePath ?? smObj.ImagePath) as string,
+            isActivated: (smObj.isActivated ?? smObj.IsActivated ?? false) as boolean,
+          } as SocialMedia;
+        });
+
         // Filter only activated social media
-        const activeSocialMedias = data.filter((sm: SocialMedia) => sm.isActivated);
+        const activeSocialMedias = normalized.filter((sm) => sm.isActivated === true);
         setSocialMedias(activeSocialMedias);
       } catch (error) {
         console.error("Failed to fetch social media", error);
@@ -174,14 +194,14 @@ function Footer() {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 mx-auto"></div>
                 </div>
               ) : socialMedias.length > 0 ? (
-                <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto mt-6">
+                <div className="flex flex-row justify-center items-center gap-3 mt-2">
                   {socialMedias.map((sm) => (
                     <Link
                       key={sm.socialMediaId}
                       href={sm.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-all hover:scale-110"
+                      className="transition-all hover:scale-110"
                       title={sm.iconName}
                     >
                       <Image
