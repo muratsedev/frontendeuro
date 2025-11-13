@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## TypeScript ESLint Compliance
+
+All TypeScript ESLint errors have been resolved for Vercel deployment:
+- ✅ ArticleImage.tsx: ObjectFit type properly specified
+- ✅ Footer.tsx: Category and social media types properly typed
+- ✅ navigation.ts: CategoryResponse types properly specified
+- ✅ TestImageDisplay.tsx: img element LCP warning fixed
+
 ## Getting Started
 
 First, run the development server:
