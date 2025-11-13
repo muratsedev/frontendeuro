@@ -74,15 +74,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 .filter((category: CategoryResponse) => {
                     const showInFooter = category.isShowInFooter ?? false;
                     console.log(`Category ${category.name} (${category.categorySlug}) - activated: ${category.isActivated} - showInFooter: ${showInFooter}`);
-                    return category.isActivated === true && showInFooter === true;
+                    return category.isActivated && showInFooter;
                 })
                 .map((category: CategoryResponse) => ({
                     id: category.id,
                     name: category.name,
                     categorySlug: category.categorySlug,
                     isActivated: category.isActivated,
-                    href: `/${category.categorySlug}`,// Route to category pages
-                    // include normalized flag for downstream consumers
+                    href: `/${category.categorySlug}`,
                     isShowInFooter: category.isShowInFooter ?? false
                 } as NavigationLink));
 
