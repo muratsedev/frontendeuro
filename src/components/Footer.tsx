@@ -31,7 +31,8 @@ function Footer() {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/navigation');
+        // Use the new footer-links API endpoint that only returns categories with isShowInFooter = true
+        const response = await fetch('/api/footer-links');
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -40,19 +41,8 @@ function Footer() {
         const data = await response.json();
         console.log('Footer categories data fetched:', data);
 
-        // Filter out non-category links (home, about, contact)
-        // and only include categories that are marked to show in footer.
-        const categoryLinks = (data || []).filter((link: unknown) => {
-          if (!link) return false;
-          const linkObj = link as Record<string, unknown>;
-          const id = linkObj.id as number | undefined;
-          if (id === 0 || id === 998 || id === 999) return false;
-          // Check normalized property or PascalCase from backend
-          const showInFooter = (linkObj.isShowInFooter ?? linkObj.IsShowInFooter) === true;
-          return showInFooter;
-        });
-
-        setCategories(categoryLinks);
+        // Data is already filtered by the API to only include footer categories
+        setCategories(data || []);
       } catch (error) {
         console.error("Failed to fetch footer categories", error);
         setCategories([]);

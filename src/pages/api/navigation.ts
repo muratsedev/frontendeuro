@@ -70,11 +70,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log('Categories received:', categories.map(c => ({ id: c.id, name: c.name, slug: c.categorySlug, active: c.isActivated })));
 
             // Transform backend data to NavigationLink format
+            // For navbar: show ALL activated categories (don't filter by isShowInFooter)
             const dynamicLinks: NavigationLink[] = categories
                 .filter((category: CategoryResponse) => {
-                    const showInFooter = category.isShowInFooter ?? false;
-                    console.log(`Category ${category.name} (${category.categorySlug}) - activated: ${category.isActivated} - showInFooter: ${showInFooter}`);
-                    return category.isActivated && showInFooter;
+                    console.log(`Navbar - Category ${category.name} (${category.categorySlug}) - activated: ${category.isActivated}`);
+                    return category.isActivated; // Only filter by activation status
                 })
                 .map((category: CategoryResponse) => ({
                     id: category.id,
