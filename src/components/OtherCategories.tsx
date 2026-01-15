@@ -95,18 +95,18 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
   }
 
   return (
-    <div className="container mx-auto py-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+    <div className="container mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         {articles.slice(0, limit).map((article) => (
           <Link
             key={article.id}
             href={`/${article.categoryId}/${article.id}`}
             className="block"
           >
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer h-[380px] flex flex-col">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer h-auto md:h-[380px] flex flex-col">
               {article.imagePath && article.imagePath.trim() !== '' ? (
                 <>
-                  <div className="w-full h-[220px] relative group flex-shrink-0">
+                  <div className="w-full h-[180px] md:h-[220px] relative group flex-shrink-0">
                     {/* Use <Image> for normal URLs, <img> for blob URLs */}
                     {/*
                       Use <Image> for normal URLs to get Next.js optimization and avoid warnings.
@@ -134,7 +134,7 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
                     
                     {/* Article title overlay on image */}
                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
-                      <h3 className="text-white font-bold text-lg md:text-xl leading-tight text-right article-title-shadow line-clamp-2">
+                      <h3 className="text-white font-bold text-sm md:text-lg lg:text-xl leading-tight text-right article-title-shadow line-clamp-2">
                         {article.articleTitle}
                       </h3>
                     </div>
@@ -144,23 +144,23 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
                   <div className="p-2.5 flex-1 flex flex-col">
                     {/* Date with icon */}
                     <div className="flex items-center justify-end gap-2 mb-1.5 text-gray-600">
-                      <span className="text-sm">
+                      <span className="text-xs md:text-sm">
                         {formatDateArabic(new Date(article.createdDate), { showHijri: false, showGregorian: true })}
                       </span>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 md:w-5 h-4 md:h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                       </svg>
                     </div>
                     
                     {/* Article summary */}
-                    <p className="text-gray-700 text-sm text-right line-clamp-3 leading-relaxed">
+                    <p className="text-gray-700 text-xs md:text-sm text-right line-clamp-3 leading-relaxed">
                       {article.articleSummary}
                     </p>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="w-full h-[220px] bg-gray-100 flex items-center justify-center rounded-t-xl relative flex-shrink-0">
+                  <div className="w-full h-[180px] md:h-[220px] bg-gray-100 flex items-center justify-center rounded-t-xl relative flex-shrink-0">
                     <span className="text-gray-400">لا توجد صورة</span>
                     {/* Title overlay even for placeholder */}
                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">

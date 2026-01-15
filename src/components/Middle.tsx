@@ -45,13 +45,13 @@ const Middle: React.FC = () => {
     
     return (
       <>
-        <div className="container mx-auto flex items-center mb-6">
+        <div className="container mx-auto flex items-center mb-3 mt-6 px-2 md:px-0">
           <div className="text-primaryOther">
-            <p>{category.name}</p>
+            <p className="text-lg md:text-xl font-semibold">{category.name}</p>
           </div>
-          <div className="w-96 h-1 mx-auto my-4 bg-primaryOther border-0 rounded-sm md:my-10"></div>
+          <div className="flex-1 h-1 mx-2 md:mx-3 bg-primaryOther border-0 rounded-sm"></div>
         </div>
-        <div className="container mx-auto mb-8">
+        <div className="container mx-auto mb-5 px-2 md:px-0">
           <OtherCategories categoryFilter={category.id} limit={4} />
         </div>
       </>
@@ -93,8 +93,8 @@ const Middle: React.FC = () => {
   return (
     <>
       {/* Main Layout with Categories on Left and Last News on Right */}
-      <div className="container mx-auto py-6">
-        <div className="grid grid-cols-12 gap-4 lg:gap-6">
+      <div className="container mx-auto py-3 px-2 md:px-0">
+        <div className="grid grid-cols-12 gap-3 md:gap-6">
           {/* Left Content - Category Sections */}
           <div className="col-span-12 lg:col-span-9">
             {activatedCategories.map((category) => (
@@ -105,25 +105,25 @@ const Middle: React.FC = () => {
           {/* Right Sidebar - Editor Choice and Last News */}
           <div className="col-span-12 lg:col-span-3">
             {/* Editor Choice Section */}
-            <div className="mb-6">
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
-                <div className="text-primaryOther mx-2">
-                  <p className="text-xs sm:text-sm font-semibold">اختيار المحرر</p>
+            <div className="mb-6 bg-gray-50 rounded-lg p-3 md:p-4">
+              <div className="flex items-center justify-center mb-3">
+                <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
+                <div className="text-primaryOther mx-2 text-center">
+                  <p className="text-sm md:text-base font-semibold whitespace-nowrap">اختيار المحرر</p>
                 </div>
-                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
+                <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
               </div>
               <EditorChoice />
             </div>
 
             {/* Last News Section */}
-            <div>
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
-                <div className="text-primaryOther mx-2">
-                  <p className="text-xs sm:text-sm font-semibold">آخر الأخبار</p>
+            <div className="bg-gray-50 rounded-lg p-3 md:p-4">
+              <div className="flex items-center justify-center mb-3">
+                <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
+                <div className="text-primaryOther mx-2 text-center">
+                  <p className="text-sm md:text-base font-semibold whitespace-nowrap">آخر الأخبار</p>
                 </div>
-                <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
+                <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
               </div>
               <div className="sticky top-4">
                 <LastNews />
