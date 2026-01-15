@@ -1,0 +1,37 @@
+[build]
+  command = "npm install && npm run build"
+  publish = ".next"
+  
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
+  NETLIFY_NEXT_PLUGIN_SKIP = "false"
+
+# Environment variables for production
+[context.production.environment]
+  NEXT_PUBLIC_API_URL = "https://eennback-002-site1.atempurl.com"
+  NODE_ENV = "production"
+
+# Environment variables for branch deploys
+[context.branch-deploy.environment]
+  NEXT_PUBLIC_API_URL = "https://eennback-002-site1.atempurl.com"
+
+# Environment variables for deploy previews
+[context.deploy-preview.environment]
+  NEXT_PUBLIC_API_URL = "https://eennback-002-site1.atempurl.com"
+
+# Redirects and rewrites
+[[redirects]]
+  from = "/api/*"
+  to = "https://eennback-002-site1.atempurl.com/api/:splat"
+  status = 200
+  force = true
+
+# Handle client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

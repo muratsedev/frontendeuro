@@ -1,0 +1,472 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary-other: #28317e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Ensure text visibility in dark mode for all elements */
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark p,
+html.dark div,
+html.dark span,
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: inherit;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Text shadow utilities */
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.text-shadow-outline {
+  text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
+
+/* Strong text shadow for article titles on images */
+.article-title-shadow {
+  text-shadow: 
+    2px 2px 8px rgba(0, 0, 0, 1),
+    1px 1px 4px rgba(0, 0, 0, 1),
+    0px 0px 12px rgba(0, 0, 0, 0.9),
+    0px 3px 8px rgba(0, 0, 0, 0.9),
+    -1px -1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Custom primary color using hex */
+.text-primaryOther {
+  color: #28317e;
+}
+
+.bg-primaryOther {
+  background-color: #28317e;
+}
+
+.border-primaryOther {
+  border-color: #28317e;
+}
+
+/* Additional variants for the primary color */
+.text-primaryOther-light {
+  color: #3a7bb8;
+}
+
+.bg-primaryOther-light {
+  background-color: #3a7bb8;
+}
+
+.text-primaryOther-dark {
+  color: #1e4762;
+}
+
+.bg-primaryOther-dark {
+  background-color: #1e4762;
+}
+
+/* Hover states */
+.hover\:text-primaryOther:hover {
+  color: #28317e;
+}
+
+.hover\:bg-primaryOther:hover {
+  background-color: #28317e;
+}
+
+.hover\:border-primaryOther:hover {
+  border-color: #28317e;
+}
+
+/* Category Section Specific Styles */
+.category-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.category-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+html.dark .category-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+html.dark .category-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.article-card-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+}
+
+/* Responsive text sizing */
+@media (max-width: 768px) {
+  .category-title {
+    font-size: 1.25rem;
+  }
+  
+  .article-title-featured {
+    font-size: 1.125rem;
+  }
+  
+  .article-title-standard {
+    font-size: 0.875rem;
+  }
+}
+
+/* RTL specific styles */
+[dir="rtl"] .flex-reverse {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .text-right {
+  text-align: right;
+}
+
+/* Custom scrollbar for horizontal scrolling if needed */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #28317e;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #1e4762;
+}
+
+/* Dynamic Category Layout Styles */
+.dynamic-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  height: 400px;
+  width: 100%;
+}
+
+.small-articles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.big-article-container {
+  position: relative;
+  height: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.small-article-container {
+  position: relative;
+  height: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  min-height: 180px;
+  isolation: isolate;
+}
+
+/* Enhanced overlay for better text readability */
+.enhanced-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0.1) 70%,
+    transparent 100%
+  );
+}
+
+.small-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    transparent 100%
+  );
+}
+
+/* Responsive adjustments for dynamic layout */
+@media (max-width: 1024px) {
+  .dynamic-grid {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 1rem;
+  }
+  
+  .big-article-container {
+    height: 300px;
+    width: 100%;
+  }
+  
+  .small-articles-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  
+  .small-article-container {
+    min-height: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dynamic-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    gap: 1rem !important;
+  }
+  
+  .big-article-container {
+    height: 250px !important;
+    width: 100% !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .small-articles-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(4, 150px) !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .small-article-container {
+    min-height: 150px !important;
+    height: 150px !important;
+    width: 100% !important;
+    display: block !important;
+  }
+}
+
+/* Text sizing for dynamic components */
+.dynamic-big-title {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.dynamic-small-title {
+  font-size: 0.875rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .dynamic-big-title {
+    font-size: 1.25rem;
+  }
+  
+  .dynamic-small-title {
+    font-size: 0.75rem;
+  }
+}
+
+/* ========================================
+   ARTICLE ROTATION ANIMATIONS
+   ======================================== */
+
+/* Counter-clockwise rotation keyframes */
+@keyframes rotateCounterClockwise {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(0.9) rotate(-10deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(0.85) rotate(-20deg);
+    opacity: 0.6;
+  }
+  80% {
+    transform: scale(0.9) rotate(-10deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromBig {
+  0% {
+    transform: translateX(100%) scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideToPosition {
+  0% {
+    transform: translateX(-20%) translateY(-20%) scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInFromRight {
+  0% {
+    transform: translateX(50%) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Main rotation animation class */
+.article-rotation-animation {
+  animation: rotateCounterClockwise 1s ease-in-out;
+}
+
+/* Position-specific rotation animations */
+.rotate-to-big {
+  animation: fadeInFromRight 1s ease-out;
+}
+
+.rotate-to-top-right {
+  animation: slideFromBig 1s ease-out;
+}
+
+.rotate-to-top-left {
+  animation: slideToPosition 1s ease-out 0.1s both;
+}
+
+.rotate-to-bottom-left {
+  animation: slideToPosition 1s ease-out 0.2s both;
+}
+
+.rotate-to-bottom-right {
+  animation: slideToPosition 1s ease-out 0.3s both;
+}
+
+/* Rotation position indicators */
+.rotation-big::after {
+  content: '🆕';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(34, 197, 94, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 30;
+  animation: pulse 2s infinite;
+}
+
+.rotation-top-right::after {
+  content: '📍';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 10px;
+  z-index: 30;
+}
+
+/* New article indicator animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* Hover effects during rotation */
+.article-rotation-animation:hover {
+  transform: scale(1.05) !important;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Mobile rotation animations */
+@media (max-width: 768px) {
+  .article-rotation-animation {
+    animation: rotateCounterClockwise 0.8s ease-in-out;
+  }
+  
+  .rotate-to-big,
+  .rotate-to-top-right,
+  .rotate-to-top-left,
+  .rotate-to-bottom-left,
+  .rotate-to-bottom-right {
+    animation-duration: 0.8s;
+  }
+}
