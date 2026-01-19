@@ -1,5 +1,5 @@
 // Script to add sample articles to the database
-const BASE_URL = 'https://localhost:7065';
+const BASE_URL = 'https://localhost:5094';
 
 const sampleArticles = [
     {

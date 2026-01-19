@@ -4,7 +4,7 @@
  */
 
 /**
- * Get the backend API URL from environment or fallback to production
+ * Get the backend API URL from environment or fallback to cloud production
  * @returns The backend API base URL
  */
 export const getBackendUrl = (): string => {

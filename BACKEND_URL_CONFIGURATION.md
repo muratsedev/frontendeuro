@@ -63,7 +63,7 @@ All components use the centralized configuration through:
 ### Development (Local Backend)
 ```bash
 # .env.local
-NEXT_PUBLIC_API_URL=https://localhost:7065
+NEXT_PUBLIC_API_URL=https://localhost:5094
 ```
 
 ### Production (Cloud Backend)

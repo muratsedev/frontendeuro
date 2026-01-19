@@ -173,6 +173,22 @@ function Footer() {
                       <span>سياسة الخصوصية</span>
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/contact"
+                      className="hover:underline transition-all text-sm md:text-base flex items-center justify-center gap-2"
+                    >
+                      <span>تواصل معنا</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/advertise"
+                      className="hover:underline transition-all text-sm md:text-base flex items-center justify-center gap-2"
+                    >
+                      <span>إعلن عندنا</span>
+                    </Link>
+                  </li>
                 </ul>
               </div>
 

@@ -28,7 +28,7 @@ export const normalizeImageUrl = (imagePath: string): string => {
   const containsBackendDomain = imagePath.includes(apiDomain);
   
   // Also check for localhost URLs (from old configuration)
-  const isLocalhostUrl = imagePath.includes('localhost:7065') || imagePath.includes('localhost:5094');
+  const isLocalhostUrl = imagePath.includes('localhost:5094') || imagePath.includes('localhost:5094');
   
   // If it's localhost, convert to proxy path by extracting just the path part
   if (isLocalhostUrl) {
