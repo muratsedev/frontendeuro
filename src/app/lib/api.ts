@@ -1,6 +1,6 @@
 import axios from 'axios';
 import https from 'https';
-import { AllArticles, AllCategories } from '../types/Articles';
+import { AllArticles, AllCategories, Video } from '../types/Articles';
 import { BACKEND_API_URL } from './config';
 
 // Use centralized backend URL configuration
@@ -102,3 +102,24 @@ export const articlesApi = {
   },
 };
 
+// Add videosApi
+export const videosApi = {
+  getAll: async (): Promise<Video[]> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/Videos`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+      throw error;
+    }
+  },
+  getById: async (id: number): Promise<Video> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/Videos/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching video:', error);
+      throw error;
+    }
+  },
+};

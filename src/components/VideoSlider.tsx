@@ -1,0 +1,180 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { videosApi } from '../app/lib/api';
+import { Video } from '../app/types/Articles';
+
+type VideoSliderProps = {
+  embedded?: boolean; // when true, render full-width within parent without container/grid wrappers
+};
+
+const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const videosData = await videosApi.getAll();
+        // Filter only published videos
+        const publishedVideos = videosData.filter(video => video.isPublished);
+        setVideos(publishedVideos);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+        setError('فشل تحميل الفيديوهات');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (sliderRef.current) {
+      const scrollAmount = 210; // Adjusted for new card width plus gap
+      const currentScroll = sliderRef.current.scrollLeft;
+      const targetScroll = direction === 'left' 
+        ? currentScroll - scrollAmount 
+        : currentScroll + scrollAmount;
+      
+      sliderRef.current.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Extract video ID from YouTube link
+  const getYouTubeId = (url: string): string | null => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  // Get YouTube thumbnail
+  const getYouTubeThumbnail = (url: string): string => {
+    const videoId = getYouTubeId(url);
+    if (videoId) {
+      return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    }
+    return '/placeholder-video.jpg'; // Fallback image
+  };
+
+  // Format duration (this would need to be added to the backend or extracted from YouTube API)
+  const formatDuration = (seconds?: number): string => {
+    if (!seconds) return '00:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
+
+  // Avoid creating any vertical space while loading
+  if (loading) {
+    return null;
+  }
+
+  if (error) {
+    return null; // Don't show error, just hide the component
+  }
+
+  if (videos.length === 0) {
+    return null; // Don't show if no videos
+  }
+
+  const inner = (
+    <>
+      {/* Title Section */}
+      <div className="flex items-center mb-3">
+        <div className="text-primaryOther">
+          <p className="text-base md:text-lg font-semibold">مقاطع فيديو قصيرة</p>
+        </div>
+        <div className="flex-1 h-1 mx-2 md:mx-3 bg-primaryOther border-0 rounded-sm"></div>
+      </div>
+
+      {/* Video Slider */}
+      <div className="relative">
+        <div
+          ref={sliderRef}
+          className="flex gap-2 md:gap-3 overflow-x-auto scrollbar-hide scroll-smooth"
+        >
+          {videos.map((video) => (
+            <a
+              key={video.videoId}
+              href={video.videoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 w-[160px] sm:w-[180px] md:w-[200px] lg:w-[220px] group cursor-pointer"
+            >
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 h-auto md:h-[380px] flex flex-col">
+                {/* Video Thumbnail - Portrait format */}
+                <div className="relative bg-gray-200 h-[280px] md:h-[220px] flex-shrink-0">
+                  <img
+                    src={getYouTubeThumbnail(video.videoLink)}
+                    alt={video.videoTitle}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder-video.jpg';
+                    }}
+                  />
+                  
+                  {/* Duration Badge */}
+                  <div className="absolute bottom-2 right-2 bg-black bg-opacity-80 text-white text-xs px-2 py-1 rounded">
+                    {formatDuration(180)}
+                  </div>
+
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all">
+                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all">
+                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  {/* Video Title Overlay at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/70 to-transparent">
+                    <h3 className="text-white font-bold text-sm md:text-lg lg:text-xl leading-tight text-right line-clamp-2">
+                      {video.videoTitle}
+                    </h3>
+                  </div>
+                </div>
+                
+                {/* Content below image - matches article card style */}
+                <div className="p-2 flex-1 flex flex-col justify-center">
+                  {video.videoSummary && (
+                    <p className="text-gray-700 text-xs md:text-sm text-right line-clamp-2 leading-snug">
+                      {video.videoSummary}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+
+  if (embedded) {
+    return <div className="w-full mb-6">{inner}</div>;
+  }
+
+  return (
+    <div className="container mx-auto px-2 md:px-0 mb-6">
+      <div className="grid grid-cols-12 gap-3 lg:gap-5">
+        <div className="col-span-12 lg:col-span-9">
+          {inner}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default VideoSlider;

@@ -27,3 +27,15 @@ export interface AllCategories {
     isActivated: boolean;
     articles?: AllArticles[]; // Optional for backward compatibility
 }
+
+export interface Video {
+    videoId: number;
+    videoTitle: string;
+    videoSummary?: string;
+    videoLink: string;
+    isPublished: boolean;
+    createdVideoDate: Date;
+    modifiedVideoDate: Date;
+    tagId?: number;
+    tagName?: string;
+}

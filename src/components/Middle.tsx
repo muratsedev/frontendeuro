@@ -6,6 +6,8 @@ import { categoriesApi } from '../app/lib/api';
 import { AllCategories } from '../app/types/Articles';
 import LastNews from './LastNews';
 import EditorChoice from './EditorChoice';
+import VideoSlider from './VideoSlider';
+import PodcastSection from './PodcastSection';
 
 const Middle: React.FC = () => {
   const [categories, setCategories] = useState<AllCategories[]>([]);
@@ -44,24 +46,24 @@ const Middle: React.FC = () => {
     }
     
     return (
-      <>
-        <div className="container mx-auto flex items-center mb-3 mt-6 px-2 md:px-0">
+      <div className="mb-6">
+        <div className="container mx-auto flex items-center mb-3 px-2 md:px-0">
           <div className="text-primaryOther">
             <p className="text-lg md:text-xl font-semibold">{category.name}</p>
           </div>
           <div className="flex-1 h-1 mx-2 md:mx-3 bg-primaryOther border-0 rounded-sm"></div>
         </div>
-        <div className="container mx-auto mb-5 px-2 md:px-0">
+        <div className="container mx-auto px-2 md:px-0">
           <OtherCategories categoryFilter={category.id} limit={4} />
         </div>
-      </>
+      </div>
     );
   };
 
   if (loading) {
     return (
-      <div className="container mx-auto py-8">
-        <div className="flex justify-center">
+      <div className="container mx-auto py-8 min-h-screen">
+        <div className="flex justify-center items-center h-96">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primaryOther"></div>
         </div>
       </div>
@@ -70,8 +72,8 @@ const Middle: React.FC = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto py-8">
-        <div className="flex justify-center">
+      <div className="container mx-auto py-8 min-h-screen">
+        <div className="flex justify-center items-center h-96">
           <p className="text-red-500">{error}</p>
         </div>
       </div>
@@ -79,6 +81,17 @@ const Middle: React.FC = () => {
   }
 
   const activatedCategories = categories.filter(cat => cat.isActivated);
+
+  // Desired ordering for key sections on the left column
+  const desiredOrder = ['سياسة وأمن', 'اقتصاد', 'الشرق الأوسط', 'البلقان'];
+  const orderedCategories = [...activatedCategories].sort((a, b) => {
+    const ai = desiredOrder.indexOf(a.name);
+    const bi = desiredOrder.indexOf(b.name);
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return 0;
+  });
 
   if (activatedCategories.length === 0) {
     return (
@@ -90,22 +103,38 @@ const Middle: React.FC = () => {
     );
   }
 
+  // Dynamic insertion points: after 2nd for videos, after 4th for podcasts (fallback to last)
+  const insertVideoAfterIndex = Math.min(1, orderedCategories.length - 1);
+  const insertPodcastAfterIndex = Math.min(3, orderedCategories.length - 1);
+
   return (
     <>
       {/* Main Layout with Categories on Left and Last News on Right */}
-      <div className="container mx-auto py-3 px-2 md:px-0">
-        <div className="grid grid-cols-12 gap-3 md:gap-6">
-          {/* Left Content - Category Sections */}
-          <div className="col-span-12 lg:col-span-9">
-            {activatedCategories.map((category) => (
-              <CategorySection key={category.id} Name={category.name} />
+      <div className="container mx-auto px-2 md:px-0 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-5 items-start">
+          {/* Left Column - 8 columns: ordered categories and video slider */}
+          <div className="col-span-12 lg:col-span-8">
+            {orderedCategories.map((category, idx) => (
+              <React.Fragment key={category.id}>
+                <CategorySection Name={category.name} />
+                {/* Insert Video Slider after the second category (سياسة وأمن, اقتصاد) */}
+                {idx === insertVideoAfterIndex && (
+                  <VideoSlider embedded />
+                )}
+                {/* Insert Podcast section after the 4th visible category */}
+                {idx === insertPodcastAfterIndex && (
+                  <PodcastSection />
+                )}
+              </React.Fragment>
             ))}
           </div>
           
-          {/* Right Sidebar - Editor Choice and Last News */}
-          <div className="col-span-12 lg:col-span-3">
+          {/* Video Slider is rendered inside the left column above */}
+          
+          {/* Right Column - 4 columns: Editor Choice then Last News */}
+          <div className="col-span-12 lg:col-span-4">
             {/* Editor Choice Section */}
-            <div className="mb-6 bg-gray-50 rounded-lg p-3 md:p-4">
+            <div className="mb-4 bg-gray-50 rounded-lg p-3 md:p-4">
               <div className="flex items-center justify-center mb-3">
                 <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
                 <div className="text-primaryOther mx-2 text-center">
@@ -125,13 +154,15 @@ const Middle: React.FC = () => {
                 </div>
                 <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
               </div>
-              <div className="sticky top-4">
+              <div className="lg:sticky lg:top-4">
                 <LastNews />
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* All categories are rendered in the left column above; no separate remaining block */}
     </>
   );
 };

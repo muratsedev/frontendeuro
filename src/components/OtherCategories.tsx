@@ -84,19 +84,17 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
 
   if (loading) {
     return (
-      <div className="container mx-auto py-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(3)].map((_, index) => (
-            <div key={index} className="bg-gray-200 animate-pulse rounded-lg h-48"></div>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {[...Array(4)].map((_, index) => (
+          <div key={index} className="bg-gray-200 animate-pulse rounded-lg h-48"></div>
+        ))}
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
         {articles.slice(0, limit).map((article) => (
           <Link
             key={article.id}
@@ -118,7 +116,7 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
                       alt={article.articleTitle}
                       fill
                       className="object-cover rounded-t-xl"
-                      style={{ objectPosition: 'center' }}
+                      style={{ objectPosition: 'top center' }}
                       sizes="(max-width: 768px) 100vw, 50vw"
                       priority={false}
                       loader={({ src }) => src}

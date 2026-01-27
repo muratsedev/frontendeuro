@@ -157,6 +157,7 @@ export default function MainUp() {
                     alt={article.articleTitle}
                     fill
                     className="object-cover"
+                    style={{ objectPosition: 'top center' }}
                     unoptimized={true}
                   />
                 )}
@@ -186,6 +187,7 @@ export default function MainUp() {
                   alt={mainArticle?.articleTitle || ""}
                   fill
                   className="object-cover"
+                  style={{ objectPosition: 'top center' }}
                   unoptimized={true}
                 />
               )}
@@ -220,6 +222,7 @@ export default function MainUp() {
                     alt={article.articleTitle}
                     fill
                     className="object-cover"
+                    style={{ objectPosition: 'top center' }}
                     unoptimized={true}
                   />
                 )}
@@ -252,6 +255,7 @@ export default function MainUp() {
                   alt={article.articleTitle}
                   fill
                   className="object-cover"
+                  style={{ objectPosition: 'top center' }}
                   unoptimized={true}
                 />
               )}

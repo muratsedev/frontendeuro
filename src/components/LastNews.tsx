@@ -87,7 +87,7 @@ const LastNews = ({ className = '' }: LastNewsProps) => {
   }
 
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-lg shadow-lg overflow-hidden flex flex-col min-h-[500px] ${className}`}>
+    <div className={`bg-white dark:bg-slate-900 rounded-lg shadow-lg overflow-hidden flex flex-col ${className}`}>
       {/* Articles List - Scrollable */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-3">

@@ -88,6 +88,7 @@ const EditorChoice: React.FC = () => {
                   alt={article.articleTitle}
                   fill
                   className="object-cover"
+                  style={{ objectPosition: 'top center' }}
                   unoptimized={true}
                 />
               )}

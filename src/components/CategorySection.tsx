@@ -41,9 +41,9 @@ const CategorySection = ({
   }
 
   return (
-    <div className="bg-white rounded-lg category-card overflow-hidden mb-8" dir="rtl">
+    <div className="bg-white rounded-lg category-card overflow-hidden mb-6" dir="rtl">
       {/* Category Header */}
-      <div className="bg-primaryOther px-6 py-4">
+      <div className="bg-primaryOther px-5 py-3">
         <div className="flex justify-between items-center">
           <h2 className="text-white font-bold text-xl category-title">{category.name}</h2>
           {showViewAll && (
@@ -59,10 +59,10 @@ const CategorySection = ({
       </div>
 
       {/* Articles Grid */}
-      <div className="p-6">
+      <div className="p-5">
         {displayedArticles.length >= 3 ? (
           // Enhanced magazine-style layout
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 md:gap-5">
             {/* Main Featured Article (Large) */}
             <div className="lg:col-span-2">
               <ArticleCard 
@@ -84,7 +84,7 @@ const CategorySection = ({
           </div>
         ) : (
           // Alternative layout for fewer articles
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
             {displayedArticles.map((article) => (
               <ArticleCard 
                 key={article.id} 
@@ -97,7 +97,7 @@ const CategorySection = ({
 
         {/* Additional Articles Row */}
         {displayedArticles.length > 5 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 pt-6 border-t border-gray-100">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 mt-5 pt-5 border-t border-gray-100">
             {displayedArticles.slice(5).map((article) => (
               <ArticleCard 
                 key={article.id} 

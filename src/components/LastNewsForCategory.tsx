@@ -100,6 +100,7 @@ const LastNewsForCategory = ({ categoryId, className = '' }: LastNewsForCategory
                       src={article.imagePath || "/img/1.jpg"}
                       alt={article.articleTitle}
                       className="w-full h-full object-cover"
+                      position="top center"
                       fallbackElement={
                         <div className="w-full h-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center">
                           <span className="text-xs text-gray-400 dark:text-gray-500">صورة</span>
