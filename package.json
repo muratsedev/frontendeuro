@@ -10,7 +10,7 @@
     "export": "next build && next export"
   },
   "engines": {
-    "node": "22.x"
+    "node": "20.x"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",
