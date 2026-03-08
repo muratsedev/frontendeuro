@@ -9,7 +9,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'eennback-002-site1.atempurl.com',
+        hostname: 'euronews-001-site1.stempurl.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'euronews-001-site2.stempurl.com',
       },
       {
         protocol: 'https',
@@ -34,7 +38,7 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async rewrites() {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
     return [
       {
         source: '/api/backend/:path*',

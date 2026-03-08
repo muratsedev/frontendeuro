@@ -87,7 +87,7 @@ export default function SocialMediaIcons({
             title={sm.iconName}
           >
             <Image
-              src={`${BACKEND_API_URL}/${sm.imagePath}`}
+              src={sm.imagePath?.startsWith('http') ? sm.imagePath : `${BACKEND_API_URL}/${sm.imagePath}`}
               alt={sm.iconName}
               width={iconSize}
               height={iconSize}

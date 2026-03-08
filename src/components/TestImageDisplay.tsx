@@ -11,7 +11,7 @@ interface TestImageDisplayProps {
 }
 
 const TestImageDisplay: React.FC<TestImageDisplayProps> = ({
-  imageUrl = `${process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`,
+  imageUrl = `${process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`,
   title = "Test Image Display",
   description = "Testing image display with the provided URL"
 }) => {

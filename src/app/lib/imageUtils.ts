@@ -12,7 +12,7 @@ export const encodeImageUrl = (url: string): string => {
   
   // If it's a relative path, convert to absolute first
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
     url = `${backendUrl}${url.startsWith('/') ? '' : '/'}${url}`;
   }
   
@@ -52,7 +52,7 @@ export const getImageUrl = (path?: string): string | undefined => {
   }
   
   // For relative paths, construct and encode the full URL
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
   const fullPath = `${backendUrl}${path.startsWith("/") ? "" : "/"}${path}`;
   
   return encodeImageUrl(fullPath);
@@ -82,7 +82,7 @@ export const normalizeImagePath = (imagePath: string): string => {
   }
   
   // Get the backend URL from environment (fallback for old relative paths)
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
   console.log('Backend URL from env:', backendUrl);
   
   let result: string;

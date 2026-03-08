@@ -8,7 +8,7 @@
  * @returns The backend API base URL
  */
 export const getBackendUrl = (): string => {
-  return process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
 };
 
 /**
