@@ -6,8 +6,8 @@
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  NODE_VERSION = "20"
-  NPM_VERSION = "10"
+  NODE_VERSION = "24"
+  NPM_VERSION = "11"
   NETLIFY_NEXT_PLUGIN_SKIP = "false"
 
 # Environment variables for production
