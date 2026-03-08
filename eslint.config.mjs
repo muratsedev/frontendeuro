@@ -1,33 +1,17 @@
-import tsParser from "@typescript-eslint/parser";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
 
 const eslintConfig = [
-  {
-    ignores: [".next/**", "node_modules/**", "public/**"],
-  },
-  {
-    files: ["**/*.{js,jsx,ts,tsx}"],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        ecmaFeatures: { jsx: true },
-      },
-    },
-    linterOptions: {
-      reportUnusedDisableDirectives: "off",
-    },
-    plugins: {
-      "react-hooks": reactHooksPlugin,
-      "@typescript-eslint": tsPlugin,
-    },
-    rules: {
-      "no-unused-vars": "off",
-      "no-console": "off",
-    },
-  },
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 
 export default eslintConfig;
+
