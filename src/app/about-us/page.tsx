@@ -19,7 +19,7 @@ export default function AboutUsPage() {
     const fetchAboutUs = async () => {
       try {
         setLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://eennback-002-site1.atempurl.com";
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://euronews-001-site1.stempurl.com";
         const response = await fetch(`${baseUrl}/api/AboutUs`);
 
         if (!response.ok) {

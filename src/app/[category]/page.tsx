@@ -121,13 +121,13 @@ const CategoryRootPage = () => {
                           <ArticleImage
                             src={
                               article.imagePath ||
-                              `${process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`
+                              `${process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`
                             }
                             alt={article.articleTitle || "Food Image"}
                             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                             fallbackElement={
                               <ArticleImage
-                                src={`${process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`}
+                                src={`${process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com'}/uploads/images/2e18a6ef-5830-41ac-a7c8-7af1229b91c9_Food.PNG`}
                                 alt="Food Image Fallback"
                                 className="w-full h-full object-contain"
                                 fallbackElement={

@@ -19,7 +19,7 @@ export default function TermsOfUsePage() {
     const fetchTermsOfUse = async () => {
       try {
         setLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://euronews-001-site1.stempurl.com";
         const response = await fetch(`${baseUrl}/api/TermsOfUse`);
 
         if (!response.ok) {

@@ -12,21 +12,21 @@
 
 # Environment variables for production
 [context.production.environment]
-  NEXT_PUBLIC_API_URL = "https://eennback-002-site1.atempurl.com"
+  NEXT_PUBLIC_API_URL = "https://euronews-001-site1.stempurl.com"
   NODE_ENV = "production"
 
 # Environment variables for branch deploys
 [context.branch-deploy.environment]
-  NEXT_PUBLIC_API_URL = "https://eennback-002-site1.atempurl.com"
+  NEXT_PUBLIC_API_URL = "https://euronews-001-site1.stempurl.com"
 
 # Environment variables for deploy previews
 [context.deploy-preview.environment]
-  NEXT_PUBLIC_API_URL = "https://eennback-002-site1.atempurl.com"
+  NEXT_PUBLIC_API_URL = "https://euronews-001-site1.stempurl.com"
 
 # Redirects and rewrites
 [[redirects]]
   from = "/api/*"
-  to = "https://eennback-002-site1.atempurl.com/api/:splat"
+  to = "https://euronews-001-site1.stempurl.com/api/:splat"
   status = 200
   force = true
 

@@ -11,7 +11,7 @@ export type BreakingNews = {
 };
 
 // Backend API configuration
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
 const BREAKING_NEWS_API_URL = `${BASE_URL}/api/BreakingNews`;
 
 // Configure axios to handle HTTPS development certificates

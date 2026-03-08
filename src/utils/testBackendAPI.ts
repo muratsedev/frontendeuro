@@ -1,6 +1,6 @@
 // Test file to check backend API connection
 const testBackendAPI = async () => {
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://eennback-002-site1.atempurl.com';
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
   const CATEGORIES_API_URL = `${BASE_URL}/api/Categories`;
   
   console.log('Testing backend API:', CATEGORIES_API_URL);
