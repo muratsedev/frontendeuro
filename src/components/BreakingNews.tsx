@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { BACKEND_API_URL } from "../app/lib/config";
 
 type BreakingNewsItem = {
   id: number;
@@ -22,7 +21,7 @@ const BreakingNews = () => {
   // Function to update breaking news published status
   const updateBreakingNewsStatus = useCallback(async (id: number, isPublished: boolean) => {
     try {
-      const response = await fetch(`${BACKEND_API_URL}/api/BreakingNews/${id}`, {
+      const response = await fetch(`/api/breaking-news/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -155,20 +154,12 @@ const BreakingNews = () => {
       try {
         setLoading(true);
         
-        // Check if BACKEND_API_URL is defined
-        if (!BACKEND_API_URL) {
-          console.error('BACKEND_API_URL is not defined');
-          setBreakingNews([]);
-          return;
-        }
-        
-        const response = await fetch(`${BACKEND_API_URL}/api/BreakingNews`, {
+        const response = await fetch('/api/breaking-news', {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
           },
-          // Add timeout and error handling
-          signal: AbortSignal.timeout(10000) // 10 second timeout
+          signal: AbortSignal.timeout(10000)
         });
         
         if (!response.ok) {
@@ -201,11 +192,10 @@ const BreakingNews = () => {
     fetchBreakingNews();
 
     // Set up periodic check every 60 seconds to ensure expired news are caught
-    // Only if we have a valid API URL
-    const periodicCheck = BACKEND_API_URL ? setInterval(() => {
+    const periodicCheck = setInterval(() => {
       console.log('Performing periodic check for expired breaking news...');
       fetchBreakingNews();
-    }, 60000) : null; // Check every 60 seconds
+    }, 60000);
 
     // Cleanup timers on unmount
     return () => {

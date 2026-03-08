@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { BACKEND_API_URL } from "../app/lib/config";
 
 type CategoryLink = {
   id: number;
@@ -54,7 +53,7 @@ function Footer() {
     const fetchSocialMedias = async () => {
       try {
         setSocialMediaLoading(true);
-        const response = await fetch(`${BACKEND_API_URL}/api/SocialMedia`);
+        const response = await fetch('/api/social-media');
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -213,7 +212,7 @@ function Footer() {
                         title={sm.iconName}
                       >
                         <Image
-                          src={sm.imagePath?.startsWith('http') ? sm.imagePath : `${BACKEND_API_URL}/${sm.imagePath}`}
+                          src={sm.imagePath?.startsWith('http') ? sm.imagePath : `/backend-images/${sm.imagePath}`}
                           alt={sm.iconName}
                           width={32}
                           height={32}

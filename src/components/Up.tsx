@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { IoMdTime } from "react-icons/io";
 import { useCurrentDate } from "../hooks/useDateFormatting";
-import { BACKEND_API_URL } from "../app/lib/config";
 
 type SocialMedia = {
   socialMediaId: number;
@@ -33,7 +32,7 @@ function Up() {
     const fetchSocialMedias = async () => {
       try {
         setSocialMediaLoading(true);
-        const response = await fetch(`${BACKEND_API_URL}/api/SocialMedia`);
+        const response = await fetch('/api/social-media');
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -117,7 +116,7 @@ function Up() {
                         title={sm.iconName}
                       >
                         <Image
-                          src={sm.imagePath?.startsWith('http') ? sm.imagePath : `${BACKEND_API_URL}/${sm.imagePath}`}
+                          src={sm.imagePath?.startsWith('http') ? sm.imagePath : `/backend-images/${sm.imagePath}`}
                           alt={sm.iconName}
                           width={40}
                           height={40}

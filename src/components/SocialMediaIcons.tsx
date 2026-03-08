@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { BACKEND_API_URL } from "../app/lib/config";
 
 type SocialMedia = {
   socialMediaId: number;
@@ -32,7 +31,7 @@ export default function SocialMediaIcons({
     const fetchSocialMedias = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${BACKEND_API_URL}/api/SocialMedia`);
+        const response = await fetch('/api/social-media');
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -87,7 +86,7 @@ export default function SocialMediaIcons({
             title={sm.iconName}
           >
             <Image
-              src={sm.imagePath?.startsWith('http') ? sm.imagePath : `${BACKEND_API_URL}/${sm.imagePath}`}
+              src={sm.imagePath?.startsWith('http') ? sm.imagePath : `/backend-images/${sm.imagePath}`}
               alt={sm.iconName}
               width={iconSize}
               height={iconSize}
