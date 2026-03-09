@@ -24,11 +24,24 @@ export const normalizeImageUrl = (imagePath: string): string => {
   
   console.log('🔍 normalizeImageUrl:', { imagePath, apiUrl, apiDomain });
   
-  // Check if the URL contains our backend domain (even if protocol differs)
+    // Check if the URL contains our backend domains (site1 or site2)
+    const site2Domain = 'euronews-001-site2.stempurl.com';
   const containsBackendDomain = imagePath.includes(apiDomain);
+    const containsSite2Domain = imagePath.includes(site2Domain);
   
   // Also check for localhost URLs (from old configuration)
   const isLocalhostUrl = imagePath.includes('localhost:5094') || imagePath.includes('localhost:5094');
+  
+    // If it's a site2 URL, convert to proxy path through site1 API
+    if (imagePath.includes(site2Domain)) {
+      // Extract the path after site2 domain
+      const urlMatch = imagePath.match(/euronews-001-site2\.stempurl\.com(\/.*)/);
+      if (urlMatch) {
+        const path = urlMatch[1];
+        console.log('🔧 Converting site2 URL to proxy:', imagePath, '→', `/backend-images${path}`);
+        return `/backend-images${path}`;
+      }
+    }
   
   // If it's localhost, convert to proxy path by extracting just the path part
   if (isLocalhostUrl) {
