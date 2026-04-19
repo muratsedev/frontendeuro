@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { getImageSource } from "../app/lib/imageHelpers";
 
 type CategoryLink = {
   id: number;
@@ -75,7 +76,7 @@ function Footer() {
         });
 
         // Filter only activated social media
-        const activeSocialMedias = normalized.filter((sm: SocialMedia) => sm.isActivated === true);
+        const activeSocialMedias = normalized.filter((sm: SocialMedia) => sm.isActivated === true && !!sm.imagePath);
         setSocialMedias(activeSocialMedias);
       } catch (error) {
         console.error("Failed to fetch social media", error);
@@ -212,7 +213,7 @@ function Footer() {
                         title={sm.iconName}
                       >
                         <Image
-                          src={sm.imagePath?.startsWith('http') ? sm.imagePath : `/backend-images/${sm.imagePath}`}
+                          src={getImageSource(sm.imagePath)}
                           alt={sm.iconName}
                           width={32}
                           height={32}

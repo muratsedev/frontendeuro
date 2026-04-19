@@ -13,10 +13,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'euronews-001-site2.stempurl.com',
-      },
-      {
-        protocol: 'https',
         hostname: '**.atempurl.com',
       },
       {
@@ -47,7 +43,7 @@ const nextConfig: NextConfig = {
       // Proxy image requests to avoid CORS issues
       {
         source: '/backend-images/:path*',
-        destination: `${backendUrl}/:path*`,
+        destination: '/api/backend-images/:path*',
       },
       // Handle old article URL redirects using rewrites instead of middleware
       {

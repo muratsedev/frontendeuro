@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { getImageUrl } from "../app/lib/imageUtils";
+import { getImageSource } from "../app/lib/imageHelpers";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { categoriesApi } from "../app/lib/api";
@@ -90,37 +90,13 @@ export default function MainUp() {
     router.push(url);
   };
 
-  // Fetch main image as blob if needed
+  // Resolve main image via proxy-aware helper.
   useEffect(() => {
-    let objectUrl: string | undefined;
-    const setUrl = (url: string | undefined) => {
-      setMainImageUrl(url);
-      objectUrl = url;
-    };
     if (!mainArticle || !mainArticle.imagePath) {
-      setUrl(undefined);
-    } else if (/^https?:\/\//.test(mainArticle.imagePath) || mainArticle.imagePath.startsWith('data:')) {
-      setUrl(getImageUrl(mainArticle.imagePath));
+      setMainImageUrl(undefined);
     } else {
-      // Otherwise, fetch as blob
-      const fetchBlob = async () => {
-        try {
-          const urlStr = getImageUrl(mainArticle.imagePath) || '';
-          const res = await fetch(urlStr);
-          if (!res.ok) throw new Error('Image fetch failed');
-          const blob = await res.blob();
-          const url = URL.createObjectURL(blob);
-          setUrl(url);
-        } catch {
-          setUrl(undefined);
-        }
-      };
-      fetchBlob();
+      setMainImageUrl(getImageSource(mainArticle.imagePath));
     }
-    // Cleanup object URL
-    return () => {
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
-    };
   }, [mainArticle]);
 
   if (loading) {
@@ -151,9 +127,9 @@ export default function MainUp() {
               onClick={() => handleArticleClick(article)}
             >
               <div className="relative h-full">
-                {getImageUrl(article.imagePath) && (
+                {getImageSource(article.imagePath) && (
                   <Image
-                    src={getImageUrl(article.imagePath)!}
+                    src={getImageSource(article.imagePath)}
                     alt={article.articleTitle}
                     fill
                     className="object-cover"
@@ -216,9 +192,9 @@ export default function MainUp() {
               onClick={() => handleArticleClick(article)}
             >
               <div className="relative h-full">
-                {getImageUrl(article.imagePath) && (
+                {getImageSource(article.imagePath) && (
                   <Image
-                    src={getImageUrl(article.imagePath)!}
+                    src={getImageSource(article.imagePath)}
                     alt={article.articleTitle}
                     fill
                     className="object-cover"
@@ -249,9 +225,9 @@ export default function MainUp() {
             onClick={() => handleArticleClick(article)}
           >
             <div className="relative h-48">
-              {getImageUrl(article.imagePath) && (
+              {getImageSource(article.imagePath) && (
                 <Image
-                  src={getImageUrl(article.imagePath)!}
+                  src={getImageSource(article.imagePath)}
                   alt={article.articleTitle}
                   fill
                   className="object-cover"

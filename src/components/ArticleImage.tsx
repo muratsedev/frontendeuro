@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { normalizeImagePath } from '../app/lib/imageUtils';
+import { getImageSource } from '../app/lib/imageHelpers';
 
 interface ArticleImageProps {
   src?: string;
@@ -24,10 +24,18 @@ const ArticleImage: React.FC<ArticleImageProps> = ({
   const [imageLoading, setImageLoading] = useState(true);
 
   // Check if we have a valid image source
-  const hasValidSrc = src && src.trim() && !imageError;
+  const hasValidSrc = Boolean(src && src.trim() && !imageError);
 
-  // Normalize image path using centralized utility
-  const normalizedSrc = hasValidSrc ? normalizeImagePath(src.trim()) : '';
+  // Normalize image path through proxy-aware helper
+  const normalizedSrc = hasValidSrc ? getImageSource(src.trim()) : '';
+  const [currentSrc, setCurrentSrc] = useState(normalizedSrc);
+  const hasRenderableSrc = Boolean(currentSrc && currentSrc.trim());
+
+  useEffect(() => {
+    setCurrentSrc(normalizedSrc);
+    setImageError(false);
+    setImageLoading(true);
+  }, [normalizedSrc]);
 
   // Default fallback
   const defaultFallback = (
@@ -42,13 +50,13 @@ const ArticleImage: React.FC<ArticleImageProps> = ({
 
 
 
-  if (!hasValidSrc) {
+  if (!hasValidSrc || !hasRenderableSrc) {
     console.log('ArticleImage: Showing fallback due to invalid src');
     return fallbackElement || defaultFallback;
   }
 
   console.log('=== RENDERING IMAGE ===');
-  console.log('Using normalized src:', normalizedSrc);
+  console.log('Using normalized src:', currentSrc);
   console.log('hasValidSrc:', hasValidSrc);
   console.log('imageError:', imageError);
   console.log('imageLoading:', imageLoading);
@@ -62,23 +70,23 @@ const ArticleImage: React.FC<ArticleImageProps> = ({
         </div>
       )}
       {/* Use Next.js Image component for optimization */}
-      {!imageError && (
+      {!imageError && hasRenderableSrc && (
         <>
               <Image
-                src={normalizedSrc}
+                src={currentSrc}
                 alt={alt}
                 className={`${className} absolute inset-0 w-full h-full ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 z-20`}
                 style={{ objectFit: (fit || 'cover') as React.CSSProperties['objectFit'], objectPosition: position || 'center' }}
                 fill
                 sizes="100vw"
                 onError={() => {
-                  console.warn('Image failed to load:', normalizedSrc);
+                  console.warn('Image failed to load:', currentSrc);
                   setImageError(true);
                   setImageLoading(false);
                 }}
                 onLoad={() => {
                   console.log('=== IMAGE LOADED SUCCESSFULLY ===');
-                  console.log('Loaded image:', normalizedSrc);
+                  console.log('Loaded image:', currentSrc);
                   setImageLoading(false);
                 }}
                 unoptimized // Remove this line if you want Next.js to optimize remote images

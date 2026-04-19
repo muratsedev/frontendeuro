@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { getImageSource } from "../app/lib/imageHelpers";
 
 export type Article = {
   id: string;
@@ -119,6 +120,10 @@ interface ArticleCardProps {
 }
 
 const ArticleCard = ({ article, variant }: ArticleCardProps) => {
+  const resolvedImageSrc = article.imagePath && article.imagePath.trim() !== ''
+    ? getImageSource(article.imagePath)
+    : '/img/1.jpg';
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('ar-SA', {
       day: 'numeric',
@@ -133,7 +138,7 @@ const ArticleCard = ({ article, variant }: ArticleCardProps) => {
         <div className="relative h-full min-h-[400px]">
           <div className="relative overflow-hidden rounded-lg h-full">
             <Image
-              src={article.imagePath || '/img/1.jpg'}
+              src={resolvedImageSrc}
               alt={article.articleTitle}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -160,7 +165,7 @@ const ArticleCard = ({ article, variant }: ArticleCardProps) => {
           <div className="flex-shrink-0">
             <div className="w-20 h-16 relative overflow-hidden rounded">
               <Image
-                src={article.imagePath || '/img/1.jpg'}
+                src={resolvedImageSrc}
                 alt={article.articleTitle}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -186,7 +191,7 @@ const ArticleCard = ({ article, variant }: ArticleCardProps) => {
       <div className="bg-white rounded-lg overflow-hidden category-card h-full flex flex-col">
         <div className="aspect-[4/3] relative overflow-hidden">
           <Image
-            src={article.imagePath || '/img/1.jpg'}
+            src={resolvedImageSrc}
             alt={article.articleTitle}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"

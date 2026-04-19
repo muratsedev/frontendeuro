@@ -10,6 +10,14 @@ export type BreakingNews = {
     isPublished: boolean;
 };
 
+type BreakingNewsRaw = BreakingNews & {
+    Id?: number;
+    Title?: string;
+    BreakingNewsDuration?: string;
+    CreatedAt?: string;
+    IsPublished?: boolean;
+};
+
 // Backend API configuration
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
 const BREAKING_NEWS_API_URL = `${BASE_URL}/api/BreakingNews`;
@@ -25,8 +33,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         console.log('Breaking News API - Fetching from:', BREAKING_NEWS_API_URL);
 
-        const response = await axiosInstance.get<BreakingNews[]>(BREAKING_NEWS_API_URL);
-        const breakingNews = response.data;
+        const response = await axiosInstance.get<BreakingNewsRaw[]>(BREAKING_NEWS_API_URL);
+        const breakingNews = (response.data || []).map((item) => ({
+            id: item.id ?? item.Id ?? 0,
+            title: item.title ?? item.Title ?? '',
+            breakingNewsDuration: item.breakingNewsDuration ?? item.BreakingNewsDuration ?? '00:00:00',
+            createdAt: item.createdAt ?? item.CreatedAt ?? new Date(0).toISOString(),
+            isPublished: Boolean(item.isPublished ?? item.IsPublished ?? false)
+        }));
 
         console.log('Breaking News API - Received items:', breakingNews.length);
 

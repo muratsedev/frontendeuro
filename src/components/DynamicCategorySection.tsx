@@ -54,7 +54,7 @@ const DynamicCategorySection = ({
   }
 
   return (
-    <div className={`bg-white rounded-lg category-card overflow-hidden mb-8 ${className}`} dir="rtl">
+    <div className={`bg-white dark:bg-slate-900 rounded-lg category-card overflow-hidden mb-8 transition-colors ${className}`} dir="rtl">
       {/* Category Header */}
       {showHeader && (
         <div className="bg-primaryOther px-6 py-4">
@@ -147,10 +147,10 @@ const BigArticleCard = ({ article, isAnimating = false, isNew = false }: BigArti
 
   if (!imgSrc) {
     return (
-      <div className="relative h-full rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
+      <div className="relative h-full rounded-lg overflow-hidden bg-gray-200 dark:bg-slate-800 flex items-center justify-center transition-colors">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primaryOther mb-2"></div>
-          <p className="text-sm text-gray-500">جاري تحميل الصورة...</p>
+          <p className="text-sm text-gray-500 dark:text-slate-300">جاري تحميل الصورة...</p>
         </div>
       </div>
     );
@@ -199,10 +199,10 @@ const SmallArticleCard = ({ article, isAnimating = false, position = '' }: Small
 
   if (!imgSrc) {
     return (
-      <div className="relative h-full rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
+      <div className="relative h-full rounded-lg overflow-hidden bg-gray-200 dark:bg-slate-800 flex items-center justify-center transition-colors">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-primaryOther mb-1"></div>
-          <p className="text-xs text-gray-500">جاري التحميل...</p>
+          <p className="text-xs text-gray-500 dark:text-slate-300">جاري التحميل...</p>
         </div>
       </div>
     );

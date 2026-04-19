@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { normalizeImagePath } from '../app/lib/imageUtils';
+import { getImageSource } from '../app/lib/imageHelpers';
 
 interface ArticleImageProps {
   src?: string;
@@ -24,10 +24,18 @@ const ArticleImageEnhanced: React.FC<ArticleImageProps> = ({
   const [imageLoading, setImageLoading] = useState(true);
 
   // Check if we have a valid image source
-  const hasValidSrc = src && src.trim() && !imageError;
+  const hasValidSrc = Boolean(src && src.trim() && !imageError);
 
-  // Normalize image path using centralized utility
-  const normalizedSrc = hasValidSrc ? normalizeImagePath(src.trim()) : '';
+  // Normalize image path through proxy-aware helper
+  const normalizedSrc = hasValidSrc ? getImageSource(src.trim()) : '';
+  const [currentSrc, setCurrentSrc] = useState(normalizedSrc);
+  const hasRenderableSrc = Boolean(currentSrc && currentSrc.trim());
+
+  useEffect(() => {
+    setCurrentSrc(normalizedSrc);
+    setImageError(false);
+    setImageLoading(true);
+  }, [normalizedSrc]);
 
   // Default fallback
   const defaultFallback = (
@@ -39,7 +47,7 @@ const ArticleImageEnhanced: React.FC<ArticleImageProps> = ({
     </div>
   );
 
-  if (!hasValidSrc) {
+  if (!hasValidSrc || !hasRenderableSrc) {
     console.log('ArticleImageEnhanced: Showing fallback due to invalid src');
     return fallbackElement || defaultFallback;
   }
@@ -62,23 +70,23 @@ const ArticleImageEnhanced: React.FC<ArticleImageProps> = ({
         </div>
       )}
       {/* Use Next.js Image component for optimization */}
-      {!imageError && (
+      {!imageError && hasRenderableSrc && (
         <>
           <Image
-            src={normalizedSrc}
+            src={currentSrc}
             alt={alt}
             className={`${className} absolute inset-0 w-full h-full ${objectFitClass} ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 z-20`}
             fill
             sizes="100vw"
             priority={priority}
             onError={() => {
-              console.warn('Image failed to load:', normalizedSrc);
+              console.warn('Image failed to load:', currentSrc);
               setImageError(true);
               setImageLoading(false);
             }}
             onLoad={() => {
               console.log('=== IMAGE LOADED SUCCESSFULLY ===');
-              console.log('Loaded image:', normalizedSrc);
+              console.log('Loaded image:', currentSrc);
               setImageLoading(false);
             }}
             unoptimized // Remove this line if you want Next.js to optimize remote images

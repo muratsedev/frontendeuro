@@ -5,6 +5,8 @@
 import { encodeImageUrl } from './imageUtils';
 import { BACKEND_API_URL } from './config';
 
+const LEGACY_SITE2_BASE_URL = 'https://euronews-001-site2.stempurl.com';
+
 /**
  * Get the backend API URL from centralized config
  */
@@ -18,30 +20,38 @@ export const getApiUrl = (): string => {
  */
 export const normalizeImageUrl = (imagePath: string): string => {
   if (!imagePath) return '';
+
+  // Keep frontend public assets local (do not proxy to backend).
+  if (
+    imagePath.startsWith('/img/') ||
+    imagePath.startsWith('/brand') ||
+    imagePath.startsWith('/icons/') ||
+    imagePath.startsWith('/_next/')
+  ) {
+    return imagePath;
+  }
   
   const apiUrl = getApiUrl();
   const apiDomain = apiUrl.replace('https://', '').replace('http://', '');
   
   console.log('🔍 normalizeImageUrl:', { imagePath, apiUrl, apiDomain });
   
-    // Check if the URL contains our backend domains (site1 or site2)
-    const site2Domain = 'euronews-001-site2.stempurl.com';
+  // Check if the URL contains our current backend domain
   const containsBackendDomain = imagePath.includes(apiDomain);
-    const containsSite2Domain = imagePath.includes(site2Domain);
+  const isLegacySite2Url = imagePath.includes('euronews-001-site2.stempurl.com');
   
-  // Also check for localhost URLs (from old configuration)
-  const isLocalhostUrl = imagePath.includes('localhost:5094') || imagePath.includes('localhost:5094');
+  // Also check for localhost URLs (from old configurations)
+  const isLocalhostUrl = /(?:localhost|127\.0\.0\.1):\d+/.test(imagePath);
   
-    // If it's a site2 URL, convert to proxy path through site1 API
-    if (imagePath.includes(site2Domain)) {
-      // Extract the path after site2 domain
-      const urlMatch = imagePath.match(/euronews-001-site2\.stempurl\.com(\/.*)/);
-      if (urlMatch) {
-        const path = urlMatch[1];
-        console.log('🔧 Converting site2 URL to proxy:', imagePath, '→', `/backend-images${path}`);
-        return `/backend-images${path}`;
-      }
+  // Legacy support: if older data contains a site2 URL, route through backend proxy.
+  if (isLegacySite2Url) {
+    const urlMatch = imagePath.match(/https?:\/\/[^/]+(\/.*)/);
+    if (urlMatch) {
+      const path = urlMatch[1];
+      console.log('🔧 Converting legacy URL to proxy:', imagePath, '→', `/backend-images${path}`);
+      return `/backend-images${path}`;
     }
+  }
   
   // If it's localhost, convert to proxy path by extracting just the path part
   if (isLocalhostUrl) {
@@ -142,6 +152,11 @@ export const getImageSource = (imagePath: string): string => {
     console.log('✅ FINAL proxy path:', result);
     return result;
   }
+
+  // Keep local frontend assets unchanged.
+  if (normalizedUrl.startsWith('/')) {
+    return normalizedUrl;
+  }
   
   const result = encodeImageUrl(normalizedUrl);
   console.log('⚠️ FINAL direct URL (not proxied!):', result);
@@ -166,6 +181,30 @@ export const shouldFetchAsBlob = (imagePath: string): boolean => {
     imagePath.includes('/static/') ||
     !imagePath.startsWith('http')
   );
+};
+
+/**
+ * Build a legacy site2 URL for a failed proxied upload path.
+ * Used as a compatibility fallback while older files are being migrated.
+ */
+export const getLegacySite2FallbackUrl = (currentSrc: string): string | null => {
+  if (!currentSrc) return null;
+
+  const proxyMatch = currentSrc.match(/\/backend-images\/uploads\/(images|sm)\/([^?#]+)/i);
+  if (proxyMatch) {
+    const folder = proxyMatch[1].toLowerCase();
+    const fileName = proxyMatch[2];
+    return `${LEGACY_SITE2_BASE_URL}/uploads/${folder}/${fileName}`;
+  }
+
+  const directMatch = currentSrc.match(/\/uploads\/(images|sm)\/([^?#]+)/i);
+  if (directMatch) {
+    const folder = directMatch[1].toLowerCase();
+    const fileName = directMatch[2];
+    return `${LEGACY_SITE2_BASE_URL}/uploads/${folder}/${fileName}`;
+  }
+
+  return null;
 };
 
 // Re-export encodeImageUrl for convenience

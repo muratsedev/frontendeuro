@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { articlesApi, categoriesApi } from '../app/lib/api';
 import { AllArticles, AllCategories } from '../app/types/Articles';
-import { getImageUrl } from '../app/lib/imageUtils';
+import { getImageSource } from '../app/lib/imageHelpers';
 import { generateArticleUrl } from '../app/lib/urlUtils';
 
 const EditorChoice: React.FC = () => {
@@ -82,9 +82,9 @@ const EditorChoice: React.FC = () => {
           >
             {/* Image Container */}
             <div className="relative h-32 sm:h-40 overflow-hidden">
-              {getImageUrl(article.imagePath) && (
+              {getImageSource(article.imagePath) && (
                 <Image
-                  src={getImageUrl(article.imagePath)!}
+                  src={getImageSource(article.imagePath)}
                   alt={article.articleTitle}
                   fill
                   className="object-cover"

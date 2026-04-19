@@ -43,11 +43,11 @@ const CategoryRootPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primaryOther"></div>
-            <p className="mt-4 text-gray-600">جاري تحميل التصنيف...</p>
+            <p className="mt-4 text-gray-600 dark:text-slate-300">جاري تحميل التصنيف...</p>
           </div>
         </div>
       </div>
@@ -56,11 +56,11 @@ const CategoryRootPage = () => {
 
   if (error || !category) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
             <div className="text-red-500 text-lg mb-4">❌ خطأ</div>
-            <p className="text-gray-600">{error || 'التصنيف غير موجود'}</p>
+            <p className="text-gray-600 dark:text-slate-300">{error || 'التصنيف غير موجود'}</p>
             <div className="mt-4">
               <Link 
                 href="/"
@@ -76,9 +76,9 @@ const CategoryRootPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
       {/* Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-white dark:bg-slate-950 shadow-sm transition-colors">
         {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-3xl font-bold text-gray-900 text-right">
             {category.name}
@@ -115,7 +115,7 @@ const CategoryRootPage = () => {
                       <Link
                         key={article.id}
                         href={`/article/${article.id}`}
-                        className="group block bg-white rounded-xl category-card overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                        className="group block bg-white dark:bg-slate-900 rounded-xl category-card overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                       >
                         <div className="aspect-[4/3] relative overflow-hidden">
                           <ArticleImage
@@ -131,8 +131,8 @@ const CategoryRootPage = () => {
                                 alt="Food Image Fallback"
                                 className="w-full h-full object-contain"
                                 fallbackElement={
-                                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                    <span className="text-gray-400 text-lg">
+                                  <div className="w-full h-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center transition-colors">
+                                    <span className="text-gray-400 dark:text-slate-300 text-lg">
                                       صورة المقال
                                     </span>
                                   </div>
@@ -151,10 +151,10 @@ const CategoryRootPage = () => {
                         </div>
                         {/* Date and Summary below image */}
                         <div className="p-4">
-                          <p className="text-sm text-gray-600 line-clamp-2 mb-2 text-right">
+                          <p className="text-sm text-gray-600 dark:text-slate-300 line-clamp-2 mb-2 text-right">
                             {article.articleSummary}
                           </p>
-                          <div className="text-xs text-gray-500 text-right">
+                          <div className="text-xs text-gray-500 dark:text-slate-400 text-right">
                             {new Date(article.createdDate).toLocaleDateString(
                               "en-US"
                             )}

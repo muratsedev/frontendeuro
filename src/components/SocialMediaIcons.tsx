@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { getImageSource } from "../app/lib/imageHelpers";
 
 type SocialMedia = {
   socialMediaId: number;
@@ -39,9 +40,20 @@ export default function SocialMediaIcons({
         
         const data = await response.json();
         console.log('Social media icons data fetched:', data);
+
+        const normalized = (data || []).map((sm: unknown) => {
+          const social = sm as Record<string, unknown>;
+          return {
+            socialMediaId: (social.socialMediaId ?? social.SocialMediaId) as number,
+            iconName: (social.iconName ?? social.IconName) as string,
+            link: (social.link ?? social.Link) as string,
+            imagePath: (social.imagePath ?? social.ImagePath) as string,
+            isActivated: (social.isActivated ?? social.IsActivated ?? false) as boolean,
+          } as SocialMedia;
+        });
         
         // Filter only activated social media
-        const activeSocialMedias = data.filter((sm: SocialMedia) => sm.isActivated);
+        const activeSocialMedias = normalized.filter((sm: SocialMedia) => sm.isActivated && !!sm.imagePath);
         setSocialMedias(activeSocialMedias);
       } catch (error) {
         console.error("Failed to fetch social media icons", error);
@@ -86,7 +98,7 @@ export default function SocialMediaIcons({
             title={sm.iconName}
           >
             <Image
-              src={sm.imagePath?.startsWith('http') ? sm.imagePath : `/backend-images/${sm.imagePath}`}
+              src={getImageSource(sm.imagePath)}
               alt={sm.iconName}
               width={iconSize}
               height={iconSize}

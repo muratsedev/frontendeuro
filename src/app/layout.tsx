@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 //import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 
 import "./globals.css";
 import Footer from "@/components/Footer";
@@ -52,6 +53,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
+      <head>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
+            try {
+              var storedTheme = localStorage.getItem('theme');
+              var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var shouldUseDark = storedTheme ? storedTheme === 'dark' : prefersDark;
+              document.documentElement.classList.toggle('dark', shouldUseDark);
+            } catch (e) {
+              // Ignore theme init errors in unsupported environments.
+            }
+          `}
+        </Script>
+      </head>
       {/* <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       > */}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { IoMdTime } from "react-icons/io";
 import { useCurrentDate } from "../hooks/useDateFormatting";
+import { getImageSource } from "../app/lib/imageHelpers";
 
 type SocialMedia = {
   socialMediaId: number;
@@ -40,9 +41,20 @@ function Up() {
         
         const data = await response.json();
         console.log('Up social media data fetched:', data);
+
+        const normalized = (data || []).map((sm: unknown) => {
+          const social = sm as Record<string, unknown>;
+          return {
+            socialMediaId: (social.socialMediaId ?? social.SocialMediaId) as number,
+            iconName: (social.iconName ?? social.IconName) as string,
+            link: (social.link ?? social.Link) as string,
+            imagePath: (social.imagePath ?? social.ImagePath) as string,
+            isActivated: (social.isActivated ?? social.IsActivated ?? false) as boolean,
+          } as SocialMedia;
+        });
         
         // Filter only activated social media
-        const activeSocialMedias = data.filter((sm: SocialMedia) => sm.isActivated);
+        const activeSocialMedias = normalized.filter((sm: SocialMedia) => sm.isActivated && !!sm.imagePath);
         setSocialMedias(activeSocialMedias);
       } catch (error) {
         console.error("Failed to fetch social media", error);
@@ -116,7 +128,7 @@ function Up() {
                         title={sm.iconName}
                       >
                         <Image
-                          src={sm.imagePath?.startsWith('http') ? sm.imagePath : `/backend-images/${sm.imagePath}`}
+                          src={getImageSource(sm.imagePath)}
                           alt={sm.iconName}
                           width={40}
                           height={40}

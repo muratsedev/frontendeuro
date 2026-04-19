@@ -6,6 +6,7 @@ import DynamicCategorySection, { CategoryWithArticles } from "../../../component
 import MainPicturesAlt from "../../../components/MainPicturesAlt";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageSource } from "../../lib/imageHelpers";
 
 const SingleCategoryPage = () => {
   const params = useParams();
@@ -156,7 +157,7 @@ const SingleCategoryPage = () => {
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">
                     <Image
-                      src={article.imagePath || '/img/1.jpg'}
+                      src={article.imagePath && article.imagePath.trim() !== '' ? getImageSource(article.imagePath) : '/img/1.jpg'}
                       alt={article.articleTitle}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"

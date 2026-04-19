@@ -9,6 +9,14 @@ type BreakingNewsItem = {
   isPublished: boolean;
 };
 
+type BreakingNewsItemRaw = BreakingNewsItem & {
+  Id?: number;
+  Title?: string;
+  BreakingNewsDuration?: string;
+  CreatedAt?: string;
+  IsPublished?: boolean;
+};
+
 const BreakingNews = () => {
   const [breakingNews, setBreakingNews] = useState<BreakingNewsItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -168,18 +176,26 @@ const BreakingNews = () => {
           return;
         }
         
-        const data = await response.json();
-        console.log('Breaking News API - Received items:', data.length);
-        console.log('Breaking News API - Final items count:', data.filter((news: BreakingNewsItem) => news.isPublished).length);
+        const data: BreakingNewsItemRaw[] = await response.json();
+        const normalizedData: BreakingNewsItem[] = (data || []).map((news) => ({
+          id: news.id ?? news.Id ?? 0,
+          title: news.title ?? news.Title ?? '',
+          breakingNewsDuration: news.breakingNewsDuration ?? news.BreakingNewsDuration ?? '00:00:00',
+          createdAt: news.createdAt ?? news.CreatedAt ?? new Date(0).toISOString(),
+          isPublished: Boolean(news.isPublished ?? news.IsPublished ?? false),
+        }));
+
+        console.log('Breaking News API - Received items:', normalizedData.length);
+        console.log('Breaking News API - Final items count:', normalizedData.filter((news) => news.isPublished).length);
         
         // Filter only published breaking news
-        const publishedNews = data.filter((news: BreakingNewsItem) => news.isPublished);
+        const publishedNews = normalizedData.filter((news) => news.isPublished);
         setBreakingNews(publishedNews);
         
         // Set up expiration timers for all breaking news (including unpublished ones)
-        setupExpirationTimers(data, fetchBreakingNews);
+        setupExpirationTimers(normalizedData, fetchBreakingNews);
         // Set up countdown timers for visual feedback
-        setupCountdownTimers(data);
+        setupCountdownTimers(normalizedData);
       } catch (error) {
         console.error("Failed to fetch breaking news", error);
         // Don't throw error, just set empty array to prevent UI from breaking
