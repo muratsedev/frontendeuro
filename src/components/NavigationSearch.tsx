@@ -110,7 +110,7 @@ const NavigationSearch = () => {
             {!isOpen && (
                 <button
                     onClick={handleSearchClick}
-                    className="p-2 text-white font-bold hover:bg-white hover:bg-opacity-20 hover:text-gray-100 rounded transition-colors"
+                    className="p-2 text-gray-700 hover:text-primaryOther rounded transition-colors"
                     aria-label="البحث"
                 >
                     <IoSearch className="w-5 h-5" />
