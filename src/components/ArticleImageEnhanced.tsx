@@ -27,7 +27,7 @@ const ArticleImageEnhanced: React.FC<ArticleImageProps> = ({
   const hasValidSrc = Boolean(src && src.trim() && !imageError);
 
   // Normalize image path through proxy-aware helper
-  const normalizedSrc = hasValidSrc ? getImageSource(src.trim()) : '';
+  const normalizedSrc = (src && hasValidSrc) ? getImageSource(src.trim()) : '';
   const [currentSrc, setCurrentSrc] = useState(normalizedSrc);
   const hasRenderableSrc = Boolean(currentSrc && currentSrc.trim());
 
