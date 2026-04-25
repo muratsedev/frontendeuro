@@ -1,51 +1,29 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import ArticleCard, { Article } from "./ArticleCard";
+import { useInfiniteArticles } from "../hooks/useInfiniteArticles";
 
 interface LastNewsProps {
   className?: string;
 }
 
 const LastNews = ({ className = '' }: LastNewsProps) => {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { articles, loading, loadingMore, error, hasMore, loadMore } = useInfiniteArticles({ pageSize: 10 });
 
+  // Sentinel element at the bottom — triggers loadMore automatically when visible
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    const fetchLatestArticles = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        console.log("LastNews - Fetching latest 9 articles from all categories");
-        
-        // Fetch all articles and sort by creation date
-        const response = await fetch("/api/articles");
-        if (!response.ok) {
-          throw new Error('Failed to fetch articles');
-        }
-
-        const articlesData: Article[] = await response.json();
-        
-        // Filter only published articles and sort by creation date (newest first)
-        const publishedArticles = articlesData
-          .filter(article => article.isPublished)
-          .sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime())
-          .slice(0, 9); // Get only the latest 9 articles
-        
-        console.log("LastNews - Received latest articles:", publishedArticles.length);
-        
-        setArticles(publishedArticles);
-      } catch (error) {
-        console.error("Failed to fetch latest articles", error);
-        setError("فشل في تحميل آخر الأخبار");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLatestArticles();
-  }, []);
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadMore();
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loadMore]);
 
   if (loading) {
     return (
@@ -88,7 +66,6 @@ const LastNews = ({ className = '' }: LastNewsProps) => {
 
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-lg shadow-lg overflow-hidden flex flex-col ${className}`}>
-      {/* Articles List - Scrollable */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-3">
           <div className="space-y-2">
@@ -96,18 +73,27 @@ const LastNews = ({ className = '' }: LastNewsProps) => {
               <div key={article.id} className="relative">
                 <div className="rounded-lg p-2 transition-colors duration-200">
                   <ArticleCard
-                    article={article}
+                    article={article as Article}
                     variant="compact"
                     showImage={true}
                   />
                 </div>
-                {/* Divider for all items except the last */}
                 {index < articles.length - 1 && (
                   <div className="border-b border-gray-200 dark:border-slate-700 mt-2"></div>
                 )}
               </div>
             ))}
           </div>
+
+          {/* Invisible sentinel — auto-triggers next page when scrolled into view */}
+          {hasMore && <div ref={sentinelRef} className="h-8" />}
+
+          {/* Subtle loading indicator */}
+          {loadingMore && (
+            <div className="py-3 text-center">
+              <div className="inline-block w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
         </div>
       </div>
     </div>
