@@ -8,6 +8,7 @@ import LastNews from './LastNews';
 import EditorChoice from './EditorChoice';
 import VideoSlider from './VideoSlider';
 import PodcastSection from './PodcastSection';
+import OpinionsSection from './OpinionsSection';
 
 const Middle: React.FC = () => {
   const [categories, setCategories] = useState<AllCategories[]>([]);
@@ -131,8 +132,20 @@ const Middle: React.FC = () => {
           
           {/* Video Slider is rendered inside the left column above */}
           
-          {/* Right Column - 4 columns: Editor Choice then Last News */}
+          {/* Right Column - 4 columns: Opinions, Editor Choice then Last News */}
           <div className="col-span-12 lg:col-span-4">
+            {/* Opinions Section */}
+            <div className="mb-4 bg-gray-50 rounded-lg p-3 md:p-4">
+              <div className="flex items-center justify-center mb-3">
+                <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
+                <div className="text-primaryOther mx-2 text-center">
+                  <p className="text-sm md:text-base font-semibold whitespace-nowrap">المقالات</p>
+                </div>
+                <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
+              </div>
+              <OpinionsSection />
+            </div>
+
             {/* Editor Choice Section */}
             <div className="mb-4 bg-gray-50 rounded-lg p-3 md:p-4">
               <div className="flex items-center justify-center mb-3">
