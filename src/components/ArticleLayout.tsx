@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import SimpleArticleDisplay from "./SimpleArticleDisplay";
 import SocialShare from "./SocialShare";
+import ReadAlso from "./ReadAlso";
 import { articlesApi, categoriesApi } from "../app/lib/api";
 import { AllArticles, AllCategories } from "../app/types/Articles";
 
@@ -212,9 +213,9 @@ const ArticleLayout = ({
         </button>
       )}
       
-      <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
-        {/* Main Article Content Only */}
-        <div className="lg:col-span-1">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6" dir="rtl">
+        {/* Main Article Content */}
+        <div className="lg:col-span-8" dir="ltr">
           <SimpleArticleDisplay
             article={article}
             category={category}
@@ -226,6 +227,11 @@ const ArticleLayout = ({
             showCategoryBadge={true}
             shareUrl={currentUrl}
           />
+        </div>
+
+        {/* Read Also Sidebar – left side in RTL */}
+        <div className="lg:col-span-4">
+          <ReadAlso currentArticle={article} category={category} />
         </div>
       </div>
     </div>

@@ -167,7 +167,7 @@ const BreakingNews = () => {
           headers: {
             'Accept': 'application/json',
           },
-          signal: AbortSignal.timeout(10000)
+          signal: AbortSignal.timeout(35000)
         });
         
         if (!response.ok) {
@@ -197,7 +197,11 @@ const BreakingNews = () => {
         // Set up countdown timers for visual feedback
         setupCountdownTimers(normalizedData);
       } catch (error) {
-        console.error("Failed to fetch breaking news", error);
+        if (error instanceof Error && error.name === 'TimeoutError') {
+          console.warn("Breaking news fetch timed out, will retry later");
+        } else {
+          console.error("Failed to fetch breaking news", error);
+        }
         // Don't throw error, just set empty array to prevent UI from breaking
         setBreakingNews([]);
       } finally {

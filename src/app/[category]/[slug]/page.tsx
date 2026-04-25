@@ -4,8 +4,8 @@ import ArticleLayout from "../../../components/ArticleLayout";
 const ArticlePageWithCategory = () => {
   return (
     <ArticleLayout
-      showBreadcrumbs={true}
-      showBackButton={true}
+      showBreadcrumbs={false}
+      showBackButton={false}
     />
   );
 };
