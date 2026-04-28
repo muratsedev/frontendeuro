@@ -57,13 +57,13 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  // Get YouTube thumbnail
+  // Get YouTube thumbnail — hqdefault is always available including for Shorts
   const getYouTubeThumbnail = (url: string): string => {
     const videoId = getYouTubeId(url);
     if (videoId) {
-      return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
     }
-    return '/placeholder-video.jpg'; // Fallback image
+    return '/placeholder-video.jpg';
   };
 
   // Format duration (this would need to be added to the backend or extracted from YouTube API)
@@ -111,16 +111,20 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
               rel="noopener noreferrer"
               className="flex-shrink-0 w-[160px] sm:w-[180px] md:w-[200px] lg:w-[220px] group cursor-pointer"
             >
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 h-auto md:h-[380px] flex flex-col">
-                {/* Video Thumbnail - Portrait format */}
-                <div className="relative bg-gray-200 h-[280px] md:h-[220px] flex-shrink-0">
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 flex flex-col">
+                {/* Video Thumbnail - portrait/reel aspect ratio (9:16) */}
+                <div className="relative bg-gray-200 flex-shrink-0 overflow-hidden" style={{ aspectRatio: '9/16' }}>
                   <img
                     src={getYouTubeThumbnail(video.videoLink)}
                     alt={video.videoTitle}
-                    className="w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = '/placeholder-video.jpg';
+                      if (target.src.includes('hqdefault')) {
+                        target.src = target.src.replace('hqdefault', 'mqdefault');
+                      } else {
+                        target.src = '/placeholder-video.jpg';
+                      }
                     }}
                   />
                   
@@ -144,15 +148,6 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
                       {video.videoTitle}
                     </h3>
                   </div>
-                </div>
-                
-                {/* Content below image - matches article card style */}
-                <div className="p-2 flex-1 flex flex-col justify-center">
-                  {video.videoSummary && (
-                    <p className="text-gray-700 text-xs md:text-sm text-right line-clamp-2 leading-snug">
-                      {video.videoSummary}
-                    </p>
-                  )}
                 </div>
               </div>
             </a>
