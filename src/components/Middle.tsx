@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import OtherCategories from './OtherCategories';
+import Link from 'next/link';
 import { categoriesApi } from '../app/lib/api';
 import { AllCategories } from '../app/types/Articles';
 import LastNews from './LastNews';
@@ -139,7 +140,9 @@ const Middle: React.FC = () => {
               <div className="flex items-center justify-center mb-3">
                 <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
                 <div className="text-primaryOther mx-2 text-center">
-                  <p className="text-sm md:text-base font-semibold whitespace-nowrap">المقالات</p>
+                  <Link href="/opinions" className="text-sm md:text-base font-semibold whitespace-nowrap hover:underline">
+                    المقالات
+                  </Link>
                 </div>
                 <div className="flex-1 h-1 bg-primaryOther border-0 rounded-sm"></div>
               </div>
