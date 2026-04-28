@@ -65,7 +65,17 @@ const OpinionsSection: React.FC = () => {
   return (
     <div className="flex flex-col gap-3">
       {opinions.map((opinion) => {
-        const displayDate = opinion.updatedDate || opinion.createdDate;
+        // Ignore C# DateTime.MinValue (0001-01-01) which means "not set"
+        const isValidDate = (d: string | null) => {
+          if (!d) return false;
+          const year = new Date(d).getFullYear();
+          return year > 2000;
+        };
+        const displayDate = isValidDate(opinion.updatedDate)
+          ? opinion.updatedDate
+          : isValidDate(opinion.createdDate)
+          ? opinion.createdDate
+          : null;
         const authorPicSrc = opinion.authorPicture
           ? getImageSource(opinion.authorPicture)
           : null;
