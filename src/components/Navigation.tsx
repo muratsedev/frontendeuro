@@ -82,7 +82,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav ref={navRef} className="w-full bg-white border-t-2 border-b-2 border-primaryOther text-base" dir="rtl">
+    <nav ref={navRef} className="w-full bg-white text-base" dir="rtl">
       {/* Fallback indicator */}
       {usingFallback && (
         <div className="bg-yellow-600 text-yellow-100 text-xs px-2 py-1 text-center">
@@ -90,7 +90,7 @@ const Navigation = () => {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-1">
+      <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-1 border-t-2 border-b-2 border-primaryOther">
         {/* Mobile Menu Button */}
         <div className="lg:hidden flex items-center justify-end py-2">
           <div className="flex items-center gap-2">
