@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { BACKEND_API_URL } from '../app/lib/config';
 import { getImageSource } from '../app/lib/imageHelpers';
 
@@ -70,9 +71,10 @@ const OpinionsSection: React.FC = () => {
           : null;
 
         return (
-          <div
+          <Link
             key={opinion.id}
-            className="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-default"
+            href="/opinion"
+            className="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow duration-200"
             dir="rtl"
           >
             {/* Author avatar */}
@@ -108,21 +110,26 @@ const OpinionsSection: React.FC = () => {
 
             {/* Text content */}
             <div className="flex flex-col flex-1 min-w-0 text-right">
-              {opinion.authorName && (
-                <span className="text-xs font-semibold text-primaryOther mb-0.5 truncate">
-                  {opinion.authorName}
-                </span>
-              )}
               <p className="text-sm font-medium text-gray-800 leading-snug line-clamp-2">
                 {opinion.title}
               </p>
-              {displayDate && (
-                <span className="text-xs text-gray-400 mt-1">
-                  {formatDate(displayDate)}
-                </span>
-              )}
+              <div className="flex items-center gap-1 mt-1">
+                {opinion.authorName && (
+                  <span className="text-xs text-gray-500 truncate">
+                    بقلم: {opinion.authorName}
+                  </span>
+                )}
+                {displayDate && opinion.authorName && (
+                  <span className="text-xs text-gray-400">·</span>
+                )}
+                {displayDate && (
+                  <span className="text-xs text-gray-400">
+                    {formatDate(displayDate)}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>
