@@ -90,7 +90,7 @@ const Navigation = () => {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-1 border-t-2 border-b-2 border-primaryOther">
+      <div className="container mx-auto px-4 border-t-2 border-b-2 border-primaryOther">
         {/* Mobile Menu Button */}
         <div className="lg:hidden flex items-center justify-end py-2">
           <div className="flex items-center gap-2">

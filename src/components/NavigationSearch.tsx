@@ -119,7 +119,7 @@ const NavigationSearch = () => {
 
             {/* Expanded Search Input */}
             {isOpen && (
-                <div className="absolute top-0 right-0 z-50 bg-white rounded-lg shadow-lg border min-w-[300px] md:min-w-[400px]">
+                <div className="absolute top-full left-0 z-50 bg-white rounded-lg shadow-lg border min-w-[300px] md:min-w-[400px]">
                     {/* Search Input */}
                     <div className="relative">
                         <input
