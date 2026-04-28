@@ -70,6 +70,7 @@ const BreakingNews = () => {
     // Store refs to avoid stale closure issues
     const expirationTimers = expirationTimersRef.current;
     const countdownTimers = countdownTimersRef.current;
+    const controller = new AbortController();
 
     // Helper function to parse TimeOnly format (HH:mm:ss) to milliseconds
     const parseTimeOnlyToMs = (timeOnly: string): number => {
@@ -167,7 +168,7 @@ const BreakingNews = () => {
           headers: {
             'Accept': 'application/json',
           },
-          signal: AbortSignal.timeout(35000)
+          signal: controller.signal
         });
         
         if (!response.ok) {
@@ -197,8 +198,8 @@ const BreakingNews = () => {
         // Set up countdown timers for visual feedback
         setupCountdownTimers(normalizedData);
       } catch (error) {
-        if (error instanceof Error && error.name === 'TimeoutError') {
-          console.warn("Breaking news fetch timed out, will retry later");
+        if (error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
+          // silently ignore timeout and abort (e.g. component unmount)
         } else {
           console.error("Failed to fetch breaking news", error);
         }
@@ -219,6 +220,7 @@ const BreakingNews = () => {
 
     // Cleanup timers on unmount
     return () => {
+      controller.abort();
       expirationTimers.forEach(timer => clearTimeout(timer));
       expirationTimers.clear();
       countdownTimers.forEach(timer => clearInterval(timer));

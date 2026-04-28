@@ -29,11 +29,12 @@ function Up() {
 
   useEffect(() => {
     setIsMounted(true);
+    const controller = new AbortController();
     
     const fetchSocialMedias = async () => {
       try {
         setSocialMediaLoading(true);
-        const response = await fetch('/api/social-media');
+        const response = await fetch('/api/social-media', { signal: controller.signal });
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -57,7 +58,11 @@ function Up() {
         const activeSocialMedias = normalized.filter((sm: SocialMedia) => sm.isActivated && !!sm.imagePath);
         setSocialMedias(activeSocialMedias);
       } catch (error) {
-        console.error("Failed to fetch social media", error);
+        if (error instanceof Error && error.name === 'AbortError') {
+          // silently ignore — component unmounted
+        } else {
+          console.error("Failed to fetch social media", error);
+        }
         setSocialMedias([]);
       } finally {
         setSocialMediaLoading(false);
@@ -65,6 +70,7 @@ function Up() {
     };
 
     fetchSocialMedias();
+    return () => { controller.abort(); };
   }, []);
   
   return (
