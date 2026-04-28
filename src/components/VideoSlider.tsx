@@ -149,7 +149,9 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
                       if (target.src.includes('hqdefault')) {
                         target.src = target.src.replace('hqdefault', 'mqdefault');
                       } else {
-                        target.src = '/placeholder-video.jpg';
+                        // Stop the error chain — use inline gray placeholder to avoid missing file loop
+                        target.onerror = null;
+                        target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="9" height="16" viewBox="0 0 9 16"%3E%3Crect width="9" height="16" fill="%23d1d5db"/%3E%3C/svg%3E';
                       }
                     }}
                   />
