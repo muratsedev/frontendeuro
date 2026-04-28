@@ -99,6 +99,32 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
 
       {/* Video Slider */}
       <div className="relative">
+        {/* Left arrow — only when 5+ videos */}
+        {videos.length >= 5 && (
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1 bg-white border border-gray-200 shadow-md rounded-full w-9 h-9 flex items-center justify-center hover:bg-primaryOther hover:text-white hover:border-primaryOther transition-colors"
+            aria-label="السابق"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+
+        {/* Right arrow — only when 5+ videos */}
+        {videos.length >= 5 && (
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1 bg-white border border-gray-200 shadow-md rounded-full w-9 h-9 flex items-center justify-center hover:bg-primaryOther hover:text-white hover:border-primaryOther transition-colors"
+            aria-label="التالي"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
+
         <div
           ref={sliderRef}
           className="flex gap-2 md:gap-3 overflow-x-auto scrollbar-hide scroll-smooth"
