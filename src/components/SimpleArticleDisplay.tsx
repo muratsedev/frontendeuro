@@ -103,8 +103,10 @@ const SimpleArticleDisplay = ({
     <article className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden" dir="rtl">
       {/* Category Badge */}
       {showCategoryBadge && (
-        <div className="bg-primaryOther text-white px-4 py-2">
-          <span className="font-bold">{category.name}</span>
+        <div className="px-4 pt-4 pb-2">
+          <span className="inline-block bg-primaryOther text-white text-sm font-bold px-3 py-1 rounded">
+            {category.name}
+          </span>
         </div>
       )}
 

@@ -79,8 +79,9 @@ const ReadAlso = ({ currentArticle, category }: ReadAlsoProps) => {
       dir="rtl"
     >
       {/* Header */}
-      <div className="bg-[#1a3a6b] px-4 py-3">
-        <h3 className="text-white font-bold text-base">إقرأ أيضاً</h3>
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+        <div className="w-1 h-5 bg-primaryOther rounded-full flex-shrink-0"></div>
+        <h3 className="text-gray-800 font-bold text-base">إقرأ أيضاً</h3>
       </div>
 
       <ul className="divide-y divide-gray-100">
