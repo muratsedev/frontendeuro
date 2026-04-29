@@ -46,19 +46,16 @@ const nextConfig: NextConfig = {
         destination: '/api/backend-images/:path*',
       },
       // Handle old article URL redirects using rewrites instead of middleware
-      {
-        source: '/article/:id',
-        destination: '/articles/:id',
-      },
+      // Note: article links use /article/:id and are handled by the article/[id] page
     ];
   },
   async redirects() {
     return [
-      // Handle legacy article URLs
+      // Redirect /articles/:id to /article/:id (handles any cached/old plural-form URLs)
       {
-        source: '/article/:id',
-        destination: '/articles/:id',
-        permanent: true,
+        source: '/articles/:id',
+        destination: '/article/:id',
+        permanent: false,
       },
     ];
   },
