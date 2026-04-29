@@ -20,7 +20,7 @@ type BreakingNewsRaw = BreakingNews & {
 
 // Backend API configuration
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://euronews-001-site1.stempurl.com';
-const BREAKING_NEWS_API_URL = `${BASE_URL}/api/BreakingNews/published`;
+const BREAKING_NEWS_API_URL = `${BASE_URL}/api/BreakingNews`;
 
 // Configure axios to handle HTTPS development certificates
 const axiosInstance = axios.create({
@@ -34,13 +34,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log('Breaking News API - Fetching from:', BREAKING_NEWS_API_URL);
 
         const response = await axiosInstance.get<BreakingNewsRaw[]>(BREAKING_NEWS_API_URL);
-        const breakingNews = (response.data || []).map((item) => ({
+        const allNews = (response.data || []).map((item) => ({
             id: item.id ?? item.Id ?? 0,
             title: item.title ?? item.Title ?? '',
             breakingNewsDuration: item.breakingNewsDuration ?? item.BreakingNewsDuration ?? '00:00:00',
             createdAt: item.createdAt ?? item.CreatedAt ?? new Date(0).toISOString(),
             isPublished: Boolean(item.isPublished ?? item.IsPublished ?? false)
         }));
+
+        const breakingNews = allNews
+            .filter(news => news.isPublished)
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         console.log('Breaking News API - Final items count:', breakingNews.length);
 
