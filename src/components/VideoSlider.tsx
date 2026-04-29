@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { videosApi } from '../app/lib/api';
 import { Video } from '../app/types/Articles';
 
@@ -13,6 +13,7 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const scrollTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -34,19 +35,45 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
     fetchVideos();
   }, []);
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (sliderRef.current) {
-      const scrollAmount = 210; // Adjusted for new card width plus gap
-      const currentScroll = sliderRef.current.scrollLeft;
-      const targetScroll = direction === 'left' 
-        ? currentScroll - scrollAmount 
-        : currentScroll + scrollAmount;
-      
-      sliderRef.current.scrollTo({
-        left: targetScroll,
-        behavior: 'smooth'
-      });
+  // Triple videos for infinite loop (left-clone | real | right-clone)
+  const displayVideos = videos.length > 0 ? [...videos, ...videos, ...videos] : [];
+
+  // Initialize scroll to the middle set on load
+  useEffect(() => {
+    const el = sliderRef.current;
+    if (!el || videos.length === 0) return;
+    // Wait one frame so scrollWidth is computed
+    requestAnimationFrame(() => {
+      el.scrollLeft = el.scrollWidth / 3;
+    });
+  }, [videos]);
+
+  // After smooth scroll animation completes, silently jump back to middle if needed
+  const resetIfNeeded = useCallback(() => {
+    const el = sliderRef.current;
+    if (!el || videos.length === 0) return;
+    const oneSetWidth = el.scrollWidth / 3;
+    if (el.scrollLeft < oneSetWidth * 0.5) {
+      el.scrollLeft += oneSetWidth;
+    } else if (el.scrollLeft > oneSetWidth * 2 - oneSetWidth * 0.5) {
+      el.scrollLeft -= oneSetWidth;
     }
+  }, [videos.length]);
+
+  // Handle manual swipe infinite loop (debounced)
+  const handleScroll = useCallback(() => {
+    clearTimeout(scrollTimeout.current);
+    scrollTimeout.current = setTimeout(resetIfNeeded, 120);
+  }, [resetIfNeeded]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    const el = sliderRef.current;
+    if (!el) return;
+    const cardWidth = 232; // card width (~220) + gap (12)
+    el.scrollBy({ left: direction === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
+    // Reset after smooth scroll animation (~300ms)
+    clearTimeout(scrollTimeout.current);
+    scrollTimeout.current = setTimeout(resetIfNeeded, 350);
   };
 
   // Extract video ID from YouTube link
@@ -99,39 +126,36 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
 
       {/* Video Slider */}
       <div className="relative">
-        {/* Left arrow — only when 5+ videos */}
-        {videos.length >= 5 && (
-          <button
-            onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1 bg-white border border-gray-200 shadow-md rounded-full w-9 h-9 flex items-center justify-center hover:bg-primaryOther hover:text-white hover:border-primaryOther transition-colors"
-            aria-label="السابق"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-        )}
+        {/* Left arrow */}
+        <button
+          onClick={() => scroll('left')}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-1 bg-white border border-gray-200 shadow-md rounded-full w-9 h-9 flex items-center justify-center hover:bg-primaryOther hover:text-white hover:border-primaryOther transition-colors"
+          aria-label="السابق"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
 
-        {/* Right arrow — only when 5+ videos */}
-        {videos.length >= 5 && (
-          <button
-            onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1 bg-white border border-gray-200 shadow-md rounded-full w-9 h-9 flex items-center justify-center hover:bg-primaryOther hover:text-white hover:border-primaryOther transition-colors"
-            aria-label="التالي"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        )}
+        {/* Right arrow */}
+        <button
+          onClick={() => scroll('right')}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-1 bg-white border border-gray-200 shadow-md rounded-full w-9 h-9 flex items-center justify-center hover:bg-primaryOther hover:text-white hover:border-primaryOther transition-colors"
+          aria-label="التالي"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
 
         <div
           ref={sliderRef}
+          onScroll={handleScroll}
           className="flex gap-2 md:gap-3 overflow-x-auto scrollbar-hide scroll-smooth"
         >
-          {videos.map((video) => (
+          {displayVideos.map((video, index) => (
             <a
-              key={video.videoId}
+              key={`${video.videoId}-${index}`}
               href={video.videoLink}
               target="_blank"
               rel="noopener noreferrer"
