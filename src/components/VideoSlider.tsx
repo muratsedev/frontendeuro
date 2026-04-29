@@ -117,6 +117,7 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
 
         {/* Track */}
         <div
+          dir="ltr"
           className="flex mx-10"
           style={{
             gap: `${GAP}px`,
