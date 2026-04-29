@@ -42,18 +42,16 @@ export default function MainUp() {
     fetchData();
   }, []);
 
-  // Get main (center) article with UpperArticleId = 5
-  const mainArticle = articles.find(article => article.upperArticleId === 5);
-  
   // Get articles for specific UpperArticle positions
+  const mainArticleExplicit = articles.find(article => article.upperArticleId === 5);
   const rightTopArticle = articles.find(article => article.upperArticleId === 3); // علوي - أيمن 1 -> top-right
   const rightBottomArticle = articles.find(article => article.upperArticleId === 4); // علوي - أيمن 2 -> bottom-right
   const leftTopArticle = articles.find(article => article.upperArticleId === 1); // علوي - أيسر 1 -> top-left  
   const leftBottomArticle = articles.find(article => article.upperArticleId === 2); // علوي - أيسر 2 -> bottom-left
   
-  // Collect all positioned articles to exclude from fallback
-  const positionedArticleIds = [
-    mainArticle?.id,
+  // Collect explicitly positioned articles to exclude from fallback pool
+  const explicitPositionedIds = [
+    mainArticleExplicit?.id,
     rightTopArticle?.id,
     rightBottomArticle?.id,
     leftTopArticle?.id,
@@ -62,7 +60,7 @@ export default function MainUp() {
   
   // Fallback articles for any empty positions
   const fallbackArticles = articles.filter(article => 
-    !positionedArticleIds.includes(article.id)
+    !explicitPositionedIds.includes(article.id)
   );
   
   // Create final positioned articles with fallbacks
@@ -75,6 +73,9 @@ export default function MainUp() {
     rightTopArticle || fallbackArticles[2],
     rightBottomArticle || fallbackArticles[3]
   ].filter(Boolean);
+
+  // Center article: use explicit or first fallback not already used by left/right
+  const mainArticle = mainArticleExplicit || fallbackArticles[4] || fallbackArticles[0];
 
 
 
