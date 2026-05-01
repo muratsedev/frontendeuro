@@ -4,6 +4,78 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { videosApi } from '../app/lib/api';
 import { Video } from '../app/types/Articles';
 
+/* ─── Video Modal ─────────────────────────────────────────── */
+const VideoModal: React.FC<{ video: Video; onClose: () => void }> = ({ video, onClose }) => {
+  const getYouTubeId = (url: string) => {
+    const m = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+    return m && m[2].length === 11 ? m[2] : null;
+  };
+
+  const videoId = getYouTubeId(video.videoLink);
+  const embedUrl = videoId
+    ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
+    : null;
+
+  // Close on Escape key
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  // Prevent body scroll while open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-3xl mx-4"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
+          aria-label="إغلاق"
+        >
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Title */}
+        <p className="text-white text-sm font-semibold mb-2 text-right line-clamp-1 px-1">
+          {video.videoTitle}
+        </p>
+
+        {/* Video embed */}
+        <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
+          {embedUrl ? (
+            <iframe
+              src={embedUrl}
+              className="absolute inset-0 w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title={video.videoTitle}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-white">
+              رابط الفيديو غير صالح
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─── VideoSlider ─────────────────────────────────────────── */
 type VideoSliderProps = {
   embedded?: boolean;
 };
@@ -15,6 +87,7 @@ const STEP = CARD_WIDTH + GAP;
 const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [offset, setOffset] = useState(0);           // current CSS translateX (negative = moved left)
   const [transitioning, setTransitioning] = useState(false);
   const isAnimating = useRef(false);
@@ -85,6 +158,11 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
 
   const inner = (
     <>
+      {/* Video Modal */}
+      {selectedVideo && (
+        <VideoModal video={selectedVideo} onClose={() => setSelectedVideo(null)} />
+      )}
+
       <div className="flex items-center mb-3">
         <div className="text-primaryOther">
           <p className="text-base md:text-lg font-semibold">مقاطع فيديو قصيرة</p>
@@ -127,12 +205,10 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
           }}
         >
           {displayVideos.map((video, index) => (
-            <a
+            <button
               key={`${video.videoId}-${index}`}
-              href={video.videoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-shrink-0 group cursor-pointer"
+              onClick={() => setSelectedVideo(video)}
+              className="flex-shrink-0 group cursor-pointer text-left"
               style={{ width: `${CARD_WIDTH}px` }}
             >
               <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105">
@@ -167,7 +243,7 @@ const VideoSlider: React.FC<VideoSliderProps> = ({ embedded = false }) => {
                   </div>
                 </div>
               </div>
-            </a>
+            </button>
           ))}
         </div>
       </div>
