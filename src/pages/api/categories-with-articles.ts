@@ -20,6 +20,8 @@ export type Article = {
     updatedDate: string;
     isPublished: boolean;
     categoryId: number;
+    tagId?: number | null;
+    tagName?: string | null;
 };
 
 // Backend API configuration

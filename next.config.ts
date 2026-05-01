@@ -57,6 +57,12 @@ const nextConfig: NextConfig = {
         destination: '/article/:id',
         permanent: false,
       },
+      // Redirect /opinion (singular) to /opinions (plural - the dedicated opinions page)
+      {
+        source: '/opinion',
+        destination: '/opinions',
+        permanent: true,
+      },
     ];
   },
   // Enable CORS for development

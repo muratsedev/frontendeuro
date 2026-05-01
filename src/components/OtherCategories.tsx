@@ -98,7 +98,7 @@ const OtherCategories: React.FC<OtherCategoriesProps> = ({ categoryFilter, limit
         {articles.slice(0, limit).map((article) => (
           <Link
             key={article.id}
-            href={`/${article.categoryId}/${article.id}`}
+            href={`/${article.categorySlug || article.categoryId}/${article.id}`}
             className="block"
           >
             <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer h-auto md:h-[380px] flex flex-col">

@@ -6,7 +6,6 @@ import Image from "next/image";
 import SimpleArticleDisplay from "./SimpleArticleDisplay";
 import SocialShare from "./SocialShare";
 import ReadAlso from "./ReadAlso";
-import { articlesApi, categoriesApi } from "../app/lib/api";
 import { AllArticles, AllCategories } from "../app/types/Articles";
 
 interface ArticleLayoutProps {
@@ -30,16 +29,6 @@ const ArticleLayout = ({
   const [category, setCategory] = useState<AllCategories | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Function to convert title to slug
-  const createSlug = (title: string): string => {
-    return title
-      .toLowerCase()
-      .replace(/[^\u0600-\u06FF\w\s-]/g, '') // Keep Arabic characters, words, spaces, hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-      .trim();
-  };
 
   // Function to extract ID from slug (now expecting just the GUID)
   const extractIdFromSlug = (slug: string): string | null => {
@@ -72,42 +61,51 @@ const ArticleLayout = ({
           return;
         }
 
-        // Fetch all articles to find the one with matching ID
-        const allArticles = await articlesApi.getAll();
-        const foundArticle = allArticles.find((a: AllArticles) => a.id === articleId && a.isPublished);
-        
-        if (!foundArticle) {
-          setError("المقال غير موجود");
-          return;
-        }
+        // Use server-side proxied route (avoids CORS/cert issues)
+        const response = await fetch('/api/categories-with-articles');
+        if (!response.ok) throw new Error('Failed to fetch categories');
+        const categoriesWithArticles = await response.json();
 
-        // Fetch all categories to find the category
-        const allCategories = await categoriesApi.getAll();
-        const foundCategory = allCategories.find((c: AllCategories) => c.categorySlug === categorySlug || c.id === foundArticle.categoryId);
-        
-        if (!foundCategory) {
+        // Find the category by slug
+        const foundCategoryData = categoriesWithArticles.find(
+          (c: { categorySlug: string }) => c.categorySlug === categorySlug
+        );
+        if (!foundCategoryData) {
           setError("القسم غير موجود");
           return;
         }
 
-        // Verify that the article belongs to the correct category
-        if (foundArticle.categoryId !== foundCategory.id) {
-          setError("المقال لا يوجد في هذا القسم");
+        // Find the article within that category
+        const foundArticleData = foundCategoryData.articles?.find(
+          (a: { id: string }) => a.id === articleId
+        );
+        if (!foundArticleData) {
+          setError("المقال غير موجود");
           return;
         }
 
-        // Generate expected slug and check if current URL is correct
-        const expectedSlug = foundArticle.id; // Just use the article ID
-        const expectedCategorySlug = foundCategory.categorySlug || createSlug(foundCategory.name);
-        
-        // If URL doesn't match expected format, redirect to correct URL
-        if (categorySlug !== expectedCategorySlug || articleSlug !== expectedSlug) {
-          router.replace(`/${expectedCategorySlug}/${expectedSlug}`);
-          return;
-        }
+        // Map to AllArticles shape (fill optional fields with defaults)
+        const mappedArticle: AllArticles = {
+          ...foundArticleData,
+          facebook: false,
+          twitter: false,
+          tagId: foundArticleData.tagId ?? 0,
+          tagName: foundArticleData.tagName ?? '',
+          upperArticleId: foundArticleData.upperArticleId ?? 0,
+          upperArticleName: foundArticleData.upperArticleName ?? '',
+          podcastTypeId: foundArticleData.podcastTypeId ?? 0,
+          podcastName: foundArticleData.podcastName ?? '',
+        };
 
-        setArticle(foundArticle);
-        setCategory(foundCategory);
+        const mappedCategory: AllCategories = {
+          id: foundCategoryData.id,
+          name: foundCategoryData.name,
+          categorySlug: foundCategoryData.categorySlug,
+          isActivated: foundCategoryData.isActivated,
+        };
+
+        setArticle(mappedArticle);
+        setCategory(mappedCategory);
       } catch (error) {
         console.error("Failed to fetch article", error);
         setError("فشل في تحميل المقال");

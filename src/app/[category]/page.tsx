@@ -114,7 +114,7 @@ const CategoryRootPage = () => {
                     {category.articles.slice(5).map((article) => (
                       <Link
                         key={article.id}
-                        href={`/article/${article.id}`}
+                        href={`/${category.categorySlug}/${article.id}`}
                         className="group block bg-white dark:bg-slate-900 rounded-xl category-card overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
                       >
                         <div className="aspect-[4/3] relative overflow-hidden">
@@ -177,7 +177,7 @@ const CategoryRootPage = () => {
                   </div>
                   <div className="w-12 sm:w-16 h-1 bg-primaryOther border-0 rounded-sm"></div>
                 </div>
-                <LastNewsForCategory categoryId={category.id} />
+                <LastNewsForCategory categoryId={category.id} categorySlug={category.categorySlug} />
               </div>
             </div>
           </div>

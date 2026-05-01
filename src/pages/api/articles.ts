@@ -12,6 +12,7 @@ export type Article = {
     updatedDate: string;
     isPublished: boolean;
     categoryId: number;
+    categorySlug?: string;
 };
 
 // Backend API configuration

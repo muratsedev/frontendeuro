@@ -13,6 +13,12 @@
   animation: fadeSlideLeft 0.3s ease-out;
 }
 
+/* Force regular font weight for article content and all its children */
+.article-content-normal,
+.article-content-normal * {
+  font-weight: 400 !important;
+}
+
 /* Dynamic font size helpers for summary and content */
 .dynamic-font-size {
   font-size: var(--content-font-size, 16px);

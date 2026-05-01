@@ -112,6 +112,12 @@ html.dark {
   border-color: #28317e;
 }
 
+/* Force regular font weight for article body content */
+.article-content,
+.article-content * {
+  font-weight: 400 !important;
+}
+
 /* Category Section Specific Styles */
 .category-card {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);

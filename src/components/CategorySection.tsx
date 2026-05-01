@@ -68,6 +68,7 @@ const CategorySection = ({
             <div className="lg:col-span-2">
               <ArticleCard 
                 article={displayedArticles[0]} 
+                categorySlug={category.categorySlug}
                 variant="featured" 
               />
             </div>
@@ -78,6 +79,7 @@ const CategorySection = ({
                 <ArticleCard 
                   key={article.id} 
                   article={article} 
+                  categorySlug={category.categorySlug}
                   variant="standard" 
                 />
               ))}
@@ -90,6 +92,7 @@ const CategorySection = ({
               <ArticleCard 
                 key={article.id} 
                 article={article} 
+                categorySlug={category.categorySlug}
                 variant="standard" 
               />
             ))}
@@ -103,6 +106,7 @@ const CategorySection = ({
               <ArticleCard 
                 key={article.id} 
                 article={article} 
+                categorySlug={category.categorySlug}
                 variant="compact" 
               />
             ))}
@@ -116,10 +120,11 @@ const CategorySection = ({
 // Article Card Component with different variants
 interface ArticleCardProps {
   article: Article;
+  categorySlug: string;
   variant: 'featured' | 'standard' | 'compact';
 }
 
-const ArticleCard = ({ article, variant }: ArticleCardProps) => {
+const ArticleCard = ({ article, categorySlug, variant }: ArticleCardProps) => {
   const resolvedImageSrc = article.imagePath && article.imagePath.trim() !== ''
     ? getImageSource(article.imagePath)
     : '/img/1.jpg';
@@ -134,7 +139,7 @@ const ArticleCard = ({ article, variant }: ArticleCardProps) => {
 
   if (variant === 'featured') {
     return (
-      <Link href={`/article/${article.id}`} className="group block h-full">
+      <Link href={`/${categorySlug}/${article.id}`} className="group block h-full">
         <div className="relative h-full min-h-[400px]">
           <div className="relative overflow-hidden rounded-lg h-full">
             <Image
@@ -160,7 +165,7 @@ const ArticleCard = ({ article, variant }: ArticleCardProps) => {
 
   if (variant === 'compact') {
     return (
-      <Link href={`/article/${article.id}`} className="group block">
+      <Link href={`/${categorySlug}/${article.id}`} className="group block">
         <div className="flex gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
           <div className="flex-shrink-0">
             <div className="w-20 h-16 relative overflow-hidden rounded">
@@ -187,7 +192,7 @@ const ArticleCard = ({ article, variant }: ArticleCardProps) => {
 
   // Standard variant
   return (
-    <Link href={`/article/${article.id}`} className="group block h-full">
+    <Link href={`/${categorySlug}/${article.id}`} className="group block h-full">
       <div className="bg-white rounded-lg overflow-hidden category-card h-full flex flex-col">
         <div className="aspect-[4/3] relative overflow-hidden">
           <Image

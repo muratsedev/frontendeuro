@@ -11,6 +11,8 @@ export interface AllArticles {
     twitter: boolean
     editorChoice?: boolean
     categoryId: number
+    categoryName?: string
+    categorySlug?: string
     tagId: number
     tagName: string
     upperArticleId: number

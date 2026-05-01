@@ -152,7 +152,7 @@ const SingleCategoryPage = () => {
               {category.articles.slice(5).map((article) => (
                 <Link 
                   key={article.id} 
-                  href={`/article/${article.id}`} 
+                  href={`/${category.categorySlug}/${article.id}`}
                   className="group block bg-white rounded-lg category-card overflow-hidden"
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">

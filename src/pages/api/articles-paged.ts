@@ -13,6 +13,7 @@ export type Article = {
     isPublished: boolean;
     categoryId: number;
     categoryName?: string;
+    categorySlug?: string;
     tagId?: number;
     tagName?: string;
     editorChoice?: boolean;

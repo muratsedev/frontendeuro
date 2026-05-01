@@ -1,17 +1,10 @@
 import axios from 'axios';
-import https from 'https';
 import { AllArticles, AllCategories, Video } from '../types/Articles';
 import { BACKEND_API_URL } from './config';
 
 // Use centralized backend URL configuration
 const BASE_URL = BACKEND_API_URL;
 
-// Configure axios to handle HTTPS with self-signed certificates
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false // Only for development with self-signed certificates
-});
-
-axios.defaults.httpsAgent = httpsAgent;
 axios.defaults.timeout = 30000; // Increased timeout to 30 seconds
 
 export const getArticles = async (): Promise<AllArticles[]> => {

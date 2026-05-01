@@ -76,6 +76,7 @@ const LastNews = ({ className = '' }: LastNewsProps) => {
                     article={article as Article}
                     variant="compact"
                     showImage={true}
+                    category={article.categorySlug ? { id: article.categoryId, name: article.categoryName || '', categorySlug: article.categorySlug } : undefined}
                   />
                 </div>
                 {index < articles.length - 1 && (

@@ -18,10 +18,11 @@ export type Article = {
 
 interface LastNewsForCategoryProps {
   categoryId: number;
+  categorySlug: string;
   className?: string;
 }
 
-const LastNewsForCategory = ({ categoryId, className = '' }: LastNewsForCategoryProps) => {
+const LastNewsForCategory = ({ categoryId, categorySlug, className = '' }: LastNewsForCategoryProps) => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -90,7 +91,7 @@ const LastNewsForCategory = ({ categoryId, className = '' }: LastNewsForCategory
           {articles.map((article, index) => (
             <div key={article.id}>
               <Link 
-                href={`/article/${article.id}`}
+                href={`/${categorySlug}/${article.id}`}
                 className="block transition-colors duration-200 p-2 rounded hover:bg-gray-50 dark:hover:bg-slate-800"
               >
                 <div className="flex gap-3 items-start">

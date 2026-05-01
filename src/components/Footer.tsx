@@ -230,19 +230,6 @@ function Footer() {
                 )}
 
                 <div className="mt-8">
-                  <Link
-                    href="/"
-                    title="الصفحة الرئيسية - الأوروبية"
-                    className="inline-block mb-4"
-                  >
-                    <Image
-                      src={"/brand.png"}
-                      alt="شعار جريدة الأوروبية"
-                      width={140}
-                      height={140}
-                      className="hover:opacity-90 transition-opacity"
-                    />
-                  </Link>
                   <p className="mb-2">الشبكة الأوروبية للأنباء</p>
                   <div className="text-center">
                     <p className="text-sm md:text-base">

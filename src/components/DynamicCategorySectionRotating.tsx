@@ -103,6 +103,7 @@ const DynamicCategorySectionRotating = ({
             {sortedArticles[0] && (
               <BigArticleCard 
                 article={sortedArticles[0]} 
+                categorySlug={category.categorySlug}
                 isAnimating={animateRotation}
               />
             )}
@@ -114,6 +115,7 @@ const DynamicCategorySectionRotating = ({
               <div className={`small-article-container ${animateRotation ? 'rotate-to-top-right' : ''}`}>
                 <SmallArticleCard 
                   article={sortedArticles[1]}
+                  categorySlug={category.categorySlug}
                   isAnimating={animateRotation}
                   position="top-right"
                 />
@@ -124,6 +126,7 @@ const DynamicCategorySectionRotating = ({
               <div className={`small-article-container ${animateRotation ? 'rotate-to-top-left' : ''}`}>
                 <SmallArticleCard 
                   article={sortedArticles[2]}
+                  categorySlug={category.categorySlug}
                   isAnimating={animateRotation}
                   position="top-left"
                 />
@@ -134,6 +137,7 @@ const DynamicCategorySectionRotating = ({
               <div className={`small-article-container ${animateRotation ? 'rotate-to-bottom-left' : ''}`}>
                 <SmallArticleCard 
                   article={sortedArticles[3]}
+                  categorySlug={category.categorySlug}
                   isAnimating={animateRotation}
                   position="bottom-left"
                 />
@@ -144,6 +148,7 @@ const DynamicCategorySectionRotating = ({
               <div className={`small-article-container ${animateRotation ? 'rotate-to-bottom-right' : ''}`}>
                 <SmallArticleCard 
                   article={sortedArticles[4]}
+                  categorySlug={category.categorySlug}
                   isAnimating={animateRotation}
                   position="bottom-right"
                 />
@@ -159,10 +164,11 @@ const DynamicCategorySectionRotating = ({
 // Enhanced Big Article Card with Animation
 interface BigArticleCardProps {
   article: Article;
+  categorySlug: string;
   isAnimating?: boolean;
 }
 
-const BigArticleCard = ({ article, isAnimating = false }: BigArticleCardProps) => {
+const BigArticleCard = ({ article, categorySlug, isAnimating = false }: BigArticleCardProps) => {
   const { imgSrc, isBlob } = useImageLoader(article.imagePath);
 
   if (!imgSrc) {
@@ -177,7 +183,7 @@ const BigArticleCard = ({ article, isAnimating = false }: BigArticleCardProps) =
   }
 
   return (
-    <Link href={`/article/${article.id}`} className="group h-full block">
+    <Link href={`/${categorySlug}/${article.id}`} className="group h-full block">
       <div className={`relative h-full rounded-lg overflow-hidden ${isAnimating ? 'article-rotation-animation' : ''}`}>
         <Image
           src={imgSrc}
@@ -208,11 +214,12 @@ const BigArticleCard = ({ article, isAnimating = false }: BigArticleCardProps) =
 // Enhanced Small Article Card with Animation
 interface SmallArticleCardProps {
   article: Article;
+  categorySlug: string;
   isAnimating?: boolean;
   position: string;
 }
 
-const SmallArticleCard = ({ article, isAnimating = false, position }: SmallArticleCardProps) => {
+const SmallArticleCard = ({ article, categorySlug, isAnimating = false, position }: SmallArticleCardProps) => {
   const { imgSrc, isBlob } = useImageLoader(article.imagePath);
 
   if (!imgSrc) {
@@ -227,7 +234,7 @@ const SmallArticleCard = ({ article, isAnimating = false, position }: SmallArtic
   }
 
   return (
-    <Link href={`/article/${article.id}`} className="group h-full block">
+    <Link href={`/${categorySlug}/${article.id}`} className="group h-full block">
       <div className={`relative h-full rounded-lg overflow-hidden ${isAnimating ? `article-rotation-animation rotation-${position}` : ''}`}>
         <Image
           src={imgSrc}

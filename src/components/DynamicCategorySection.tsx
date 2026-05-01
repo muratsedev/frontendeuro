@@ -81,6 +81,7 @@ const DynamicCategorySection = ({
             {positions.big && (
               <BigArticleCard 
                 article={positions.big} 
+                categorySlug={category.categorySlug}
                 isAnimating={isRotating}
                 isNew={isNewArticle(positions.big.id)}
               />
@@ -93,6 +94,7 @@ const DynamicCategorySection = ({
               <div className={`small-article-container ${getRotationClass('top-right')}`}>
                 <SmallArticleCard 
                   article={positions.topRight}
+                  categorySlug={category.categorySlug}
                   isAnimating={isRotating}
                   position="top-right"
                 />
@@ -103,6 +105,7 @@ const DynamicCategorySection = ({
               <div className={`small-article-container ${getRotationClass('top-left')}`}>
                 <SmallArticleCard 
                   article={positions.topLeft}
+                  categorySlug={category.categorySlug}
                   isAnimating={isRotating}
                   position="top-left"
                 />
@@ -113,6 +116,7 @@ const DynamicCategorySection = ({
               <div className={`small-article-container ${getRotationClass('bottom-left')}`}>
                 <SmallArticleCard 
                   article={positions.bottomLeft}
+                  categorySlug={category.categorySlug}
                   isAnimating={isRotating}
                   position="bottom-left"
                 />
@@ -123,6 +127,7 @@ const DynamicCategorySection = ({
               <div className={`small-article-container ${getRotationClass('bottom-right')}`}>
                 <SmallArticleCard 
                   article={positions.bottomRight}
+                  categorySlug={category.categorySlug}
                   isAnimating={isRotating}
                   position="bottom-right"
                 />
@@ -138,11 +143,12 @@ const DynamicCategorySection = ({
 // Big Article Card (Right Side)
 interface BigArticleCardProps {
   article: Article;
+  categorySlug: string;
   isAnimating?: boolean;
   isNew?: boolean;
 }
 
-const BigArticleCard = ({ article, isAnimating = false, isNew = false }: BigArticleCardProps) => {
+const BigArticleCard = ({ article, categorySlug, isAnimating = false, isNew = false }: BigArticleCardProps) => {
   const { imgSrc, isBlob } = useImageLoader(article.imagePath);
 
   if (!imgSrc) {
@@ -157,7 +163,7 @@ const BigArticleCard = ({ article, isAnimating = false, isNew = false }: BigArti
   }
 
   return (
-    <Link href={`/article/${article.id}`} className="group h-full block">
+    <Link href={`/${categorySlug}/${article.id}`} className="group h-full block">
       <div className={`relative h-full rounded-lg overflow-hidden ${isAnimating ? 'article-rotation-animation' : ''}`}>
         <Image
           src={imgSrc}
@@ -190,11 +196,12 @@ const BigArticleCard = ({ article, isAnimating = false, isNew = false }: BigArti
 // Small Article Card (Left Side Grid)
 interface SmallArticleCardProps {
   article: Article;
+  categorySlug: string;
   isAnimating?: boolean;
   position?: string;
 }
 
-const SmallArticleCard = ({ article, isAnimating = false, position = '' }: SmallArticleCardProps) => {
+const SmallArticleCard = ({ article, categorySlug, isAnimating = false, position = '' }: SmallArticleCardProps) => {
   const { imgSrc, isBlob } = useImageLoader(article.imagePath);
 
   if (!imgSrc) {
@@ -209,7 +216,7 @@ const SmallArticleCard = ({ article, isAnimating = false, position = '' }: Small
   }
 
   return (
-    <Link href={`/article/${article.id}`} className="group h-full block">
+    <Link href={`/${categorySlug}/${article.id}`} className="group h-full block">
       <div className={`relative h-full rounded-lg overflow-hidden ${isAnimating ? `article-rotation-animation rotation-${position}` : ''}`}>
         <Image
           src={imgSrc}

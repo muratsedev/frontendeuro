@@ -144,7 +144,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { id: 4, name: 'رياضة', categorySlug: 'sports', isActivated: true, href: '/sports' },
         { id: 5, name: 'علوم وتكنولوجيا', categorySlug: 'science-technology', isActivated: true, href: '/science-technology' },
         { id: 6, name: 'دولية', categorySlug: 'international', isActivated: true, href: '/international' },
-        { id: 7, name: 'رأي', categorySlug: 'opinion', isActivated: true, href: '/opinion' },
+        { id: 7, name: 'رأي', categorySlug: 'opinions', isActivated: true, href: '/opinions' },
         { id: 8, name: 'الحالة الأوروبية', categorySlug: 'european-situation', isActivated: true, href: '/european-situation' },
         { id: 9, name: 'بودكاست', categorySlug: 'podcast', isActivated: true, href: '/podcast' },
     ];

@@ -375,18 +375,18 @@ const SimpleArticleDisplay = ({
         {/* Summary */}
         {showSummary && article.articleSummary && (
           <div 
-            className={`text-lg text-gray-700 dark:text-gray-300 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border-r-4 border-primaryOther ${styles['dynamic-font-size']}`}
-            data-font-size={fontSize}
+            className="text-gray-700 dark:text-gray-300 mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border-r-4 border-primaryOther"
+            style={{ fontSize: `${fontSize}px` }}
           >
-            <p className="font-semibold">{article.articleSummary}</p>
+            <p className="font-normal">{article.articleSummary}</p>
           </div>
         )}
 
         {/* Full Content */}
         {showFullContent && (
           <div 
-            className={`prose prose-lg max-w-none text-gray-800 dark:text-gray-100 dark:prose-invert leading-relaxed article-content ${styles['dynamic-content-font-size']}`}
-            data-font-size={fontSize}
+            className={`prose max-w-none text-gray-800 dark:text-gray-100 dark:prose-invert leading-relaxed article-content ${styles['article-content-normal']}`}
+            style={{ fontSize: `${fontSize}px` }}
             dangerouslySetInnerHTML={{ __html: article.articleContent }}
           />
         )}
@@ -395,8 +395,8 @@ const SimpleArticleDisplay = ({
         {showTags && (
           <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-wrap gap-2">
-              {article.tagId && article.tagName && (
-                <Link href={`/tag/${article.tagId}`}>
+              {!!article.tagId && !!article.tagName && (
+                <Link href={`/tag/${article.tagName}`}>
                   <span className="inline-block bg-primaryOther/10 dark:bg-primaryOther/20 text-primaryOther dark:text-primaryOther px-3 py-1 rounded-full text-sm font-medium hover:bg-primaryOther/20 dark:hover:bg-primaryOther/30 transition-colors cursor-pointer">
                     {article.tagName}
                   </span>
