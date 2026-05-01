@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { BACKEND_API_URL } from '../app/lib/config';
 import { getImageSource } from '../app/lib/imageHelpers';
 
