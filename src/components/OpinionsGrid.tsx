@@ -98,9 +98,10 @@ const OpinionsGrid: React.FC = () => {
           : null;
 
         return (
-          <div
+          <Link
             key={opinion.id}
-            className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-200"
+            href={`/opinions/${opinion.id}`}
+            className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
           >
             {/* Card image with title overlay */}
             <div className="relative w-full aspect-[4/3] bg-gray-200 flex-shrink-0">
@@ -176,7 +177,7 @@ const OpinionsGrid: React.FC = () => {
                 )}
               </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

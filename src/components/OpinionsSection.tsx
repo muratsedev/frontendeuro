@@ -83,7 +83,7 @@ const OpinionsSection: React.FC = () => {
         return (
           <Link
             key={opinion.id}
-            href="/opinion"
+            href={`/opinions/${opinion.id}`}
             className="flex items-center gap-3 bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow duration-200"
             dir="rtl"
           >
